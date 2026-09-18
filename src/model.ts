@@ -34,11 +34,23 @@ export type NumericTask = BaseTask & {
 
 export type Task = SingleChoiceTask | MultiChoiceTask | NumericTask;
 
+export type ActivityKind = "mission" | "challenge" | "phet-lab" | "virtual-lab";
+
+export type LearningActivity = {
+  id: string;
+  kind: ActivityKind;
+  title: string;
+  label: string;
+  description: string;
+  sourceRefs: string[];
+};
+
 export type LearningUnit = {
   id: string;
   chapter: string;
   title: string;
   pages: string;
   description: string;
+  activities: LearningActivity[];
   tasks: Task[];
 };
