@@ -27,6 +27,15 @@ export const electricityUnit: LearningUnit = {
       sourceRefs: ["P3-K3-S044-M01", "P3-K3-S044-M02", "P3-K3-S045-M01", "P3-K3-S046-M02", "P3-K3-S048-M02", "P3-K3-S049-M01"],
     },
     {
+      id: "medien-training",
+      kind: "media-training",
+      label: "Medien-Training",
+      title: "Paare · Zuordnen · Gruppieren",
+      description:
+        "LearningApps-artige Übungen mit großen Medienkarten statt reiner Wortlisten. Zunächst mit fachlich sicheren Symbolen und Größen.",
+      sourceRefs: ["P3-K3-S046-M02", "P3-K3-S047-M01", "P3-K3-S048-M02", "P3-K3-S049-M01", "P3-FD-018"],
+    },
+    {
       id: "challenge-mix",
       kind: "challenge",
       label: "Challenge-Mix",
