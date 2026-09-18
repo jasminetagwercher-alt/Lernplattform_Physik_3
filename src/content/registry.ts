@@ -16,7 +16,19 @@ export function validateLearningUnits(units: LearningUnit[]) {
     if (!unit.chapter.trim()) errors.push(`Einheit ${unit.id}: Kapitel fehlt.`);
     if (!unit.title.trim()) errors.push(`Einheit ${unit.id}: Titel fehlt.`);
     if (!unit.pages.trim()) errors.push(`Einheit ${unit.id}: Buchseiten fehlen.`);
+    if (unit.activities.length === 0) errors.push(`Einheit ${unit.id}: keine Aktivitäten.`);
     if (unit.tasks.length === 0) errors.push(`Einheit ${unit.id}: keine Aufgaben.`);
+
+    const activityIds = new Set<string>();
+    for (const activity of unit.activities) {
+      if (!activity.id.trim()) errors.push(`Einheit ${unit.id}: Aktivitäts-ID fehlt.`);
+      if (activityIds.has(activity.id)) errors.push(`Doppelte Aktivitäts-ID in ${unit.id}: ${activity.id}`);
+      activityIds.add(activity.id);
+      if (!activity.title.trim()) errors.push(`Aktivität ${activity.id}: Titel fehlt.`);
+      if (!activity.label.trim()) errors.push(`Aktivität ${activity.id}: Label fehlt.`);
+      if (!activity.description.trim()) errors.push(`Aktivität ${activity.id}: Beschreibung fehlt.`);
+      if (activity.sourceRefs.length === 0) errors.push(`Aktivität ${activity.id}: Quellen-ID fehlt.`);
+    }
 
     for (const task of unit.tasks) {
       if (taskIds.has(task.id)) errors.push(`Doppelte Aufgaben-ID: ${task.id}`);
