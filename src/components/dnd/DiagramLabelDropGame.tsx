@@ -22,14 +22,16 @@ function Target({
   locked,
   wrong,
   selected,
-  onSelect,
+  onSelectTarget,
+  onSelectLabel,
 }: {
   target: DiagramTarget;
   placed?: DiagramLabel;
   locked: boolean;
   wrong: boolean;
   selected: string | null;
-  onSelect: (id: string) => void;
+  onSelectTarget: (id: string) => void;
+  onSelectLabel: (id: string) => void;
 }) {
   const { overId } = usePointerDrag();
   return (
@@ -46,7 +48,7 @@ function Target({
         top: target.y + "%",
         width: (target.width ?? 22) + "%",
       }}
-      onClick={() => onSelect(target.id)}
+      onClick={() => onSelectTarget(target.id)}
     >
       {placed ? (
         <DraggableMediaTile
@@ -54,7 +56,7 @@ function Target({
           item={placed.media}
           disabled={locked}
           selected={selected === placed.id}
-          onClick={() => onSelect(target.id)}
+          onClick={() => onSelectLabel(placed.id)}
         />
       ) : (
         <span>hier ablegen</span>
@@ -194,7 +196,10 @@ export function DiagramLabelDropGame({
                 locked={Boolean(placedId && locked.includes(placedId))}
                 wrong={Boolean(placedId && wrong.includes(placedId))}
                 selected={selected}
-                onSelect={chooseTarget}
+                onSelectTarget={chooseTarget}
+                onSelectLabel={(id) => {
+                  if (!locked.includes(id)) setSelected(selected === id ? null : id);
+                }}
               />
             );
           })}
