@@ -1507,3 +1507,281 @@ footer { color: #718199; font-size: .82rem; border-top: 1px solid var(--line); p
     grid-column: 2;
   }
 }
+
+
+/* Drag & Drop V2 */
+.dnd-game {
+  overflow: visible;
+}
+
+.dnd-bank {
+  min-height: 180px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+  margin: 20px 0 18px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(91,227,255,.05), transparent 40%),
+    #091727;
+}
+
+.dnd-bank-complete {
+  grid-column: 1 / -1;
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  font-weight: 850;
+}
+
+.dnd-tile-shell {
+  min-width: 0;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transition: opacity .14s ease, transform .14s ease;
+}
+
+.dnd-tile-shell:active {
+  cursor: grabbing;
+}
+
+.dnd-tile-shell.dragging {
+  opacity: .22;
+  transform: scale(.98);
+}
+
+.dnd-tile-shell.locked {
+  cursor: default;
+}
+
+.dnd-tile-shell .media-card {
+  min-height: 145px;
+  box-shadow: 0 12px 26px rgba(0,0,0,.18);
+}
+
+.dnd-overlay-card {
+  width: min(180px, 35vw);
+  transform: rotate(1.5deg) scale(1.04);
+  filter: drop-shadow(0 24px 28px rgba(0,0,0,.34));
+  pointer-events: none;
+}
+
+.dnd-overlay-card .media-card {
+  border-color: var(--cyan);
+  background: linear-gradient(145deg, #193c50, #172545);
+  box-shadow: 0 0 0 3px rgba(91,227,255,.1) inset;
+}
+
+.pair-target-grid,
+.group-drop-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.pair-target-grid {
+  grid-template-columns: repeat(2, minmax(0,1fr));
+}
+
+.group-drop-grid {
+  grid-template-columns: repeat(2, minmax(0,1fr));
+}
+
+.dnd-drop-zone {
+  width: 100%;
+  min-height: 170px;
+  border: 2px dashed rgba(168,181,200,.28);
+  border-radius: 20px;
+  background: rgba(255,255,255,.025);
+  padding: 16px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 12px;
+  transition:
+    border-color .14s ease,
+    background .14s ease,
+    transform .14s ease,
+    box-shadow .14s ease;
+}
+
+.dnd-drop-zone.active {
+  border-color: rgba(91,227,255,.36);
+}
+
+.dnd-drop-zone.over {
+  border-style: solid;
+  border-color: var(--cyan);
+  background: rgba(91,227,255,.09);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 0 0 3px rgba(91,227,255,.06) inset, 0 16px 34px rgba(0,0,0,.18);
+}
+
+.dnd-drop-zone.success {
+  border-style: solid;
+  border-color: rgba(98,231,172,.48);
+  background: rgba(98,231,172,.07);
+}
+
+.dnd-drop-zone.error {
+  animation: dropReject .28s ease;
+  border-color: #ff7889;
+  background: rgba(255,120,137,.08);
+}
+
+@keyframes dropReject {
+  0%,100% { transform: translateX(0); }
+  30% { transform: translateX(-7px); }
+  70% { transform: translateX(7px); }
+}
+
+.drop-zone-heading {
+  display: grid;
+  gap: 2px;
+}
+
+.drop-zone-heading strong {
+  font-size: 1.06rem;
+}
+
+.drop-zone-heading small {
+  color: var(--muted);
+}
+
+.drop-zone-content {
+  min-height: 88px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(7,17,31,.38);
+  color: var(--muted);
+  text-align: center;
+  padding: 10px;
+}
+
+.drop-target-media {
+  width: 100%;
+  min-height: 88px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 7px;
+  color: #eaf1f8;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.drop-target-media img {
+  max-width: 100%;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+.target-symbol {
+  font-size: 3rem;
+  color: var(--cyan);
+  font-weight: 950;
+}
+
+.drop-check {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--green);
+  color: #07111f;
+  font-weight: 1000;
+}
+
+.group-drop-contents {
+  width: 100%;
+  min-height: 105px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-zone-copy {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.mini-placed-tile {
+  min-width: 72px;
+  min-height: 62px;
+  border: 1px solid rgba(98,231,172,.3);
+  border-radius: 12px;
+  background: rgba(98,231,172,.08);
+  padding: 9px 10px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.mini-placed-tile strong {
+  font-size: 1.7rem;
+  color: var(--cyan);
+}
+
+.mini-placed-tile span {
+  font-size: .86rem;
+  font-weight: 750;
+}
+
+.mini-placed-tile img {
+  max-width: 90px;
+  max-height: 60px;
+  object-fit: contain;
+}
+
+.dnd-help {
+  margin-top: 13px;
+  color: var(--muted);
+  font-size: .84rem;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .pair-target-grid,
+  .group-drop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dnd-bank {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+}
+
+@media (max-width: 430px) {
+  .dnd-bank {
+    grid-template-columns: 1fr 1fr;
+    padding: 10px;
+  }
+
+  .dnd-tile-shell .media-card {
+    min-height: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dnd-drop-zone,
+  .dnd-tile-shell,
+  .dnd-overlay-card,
+  .media-card {
+    transition: none !important;
+    animation: none !important;
+  }
+}
