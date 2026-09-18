@@ -1,4 +1,4 @@
-name: Build published site
+name: Validate and build site
 
 on:
   push:
@@ -10,14 +10,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: publish-main
+  group: validate-build
   cancel-in-progress: true
 
 jobs:
-  build-and-publish:
+  validate-and-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,24 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build
+      - name: Validate and build
         run: npm run build
 
-      - name: Publish compiled files to main
-        run: |
-          rm -rf assets
-          cp -R dist/assets assets
-          cp dist/index.html index.html
-          touch .nojekyll
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add -A index.html assets .nojekyll
-
-          if git diff --cached --quiet; then
-            echo "Published files are already current."
-          else
-            git commit -m "chore: publish built site [skip ci]"
-            git push
-          fi
+      - name: Upload compiled site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist/
+          if-no-files-found: error
