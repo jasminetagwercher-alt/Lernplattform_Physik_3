@@ -1,5 +1,9 @@
 import { useMemo, useState } from "react";
 import { MeasurementChart } from "./MeasurementChart";
+import { DigitalMeter } from "./lab/DigitalMeter";
+import { LabSlider } from "./lab/LabSlider";
+import { MeasurementTable } from "./lab/MeasurementTable";
+import { ResearchTask } from "./lab/ResearchTask";
 
 type Measurement = {
   id: number;
@@ -78,39 +82,33 @@ export function ResistanceLab() {
 
       <div className="lab-layout">
         <div className="controls">
-          <label className={mode === "vary-resistance" ? "locked-control" : ""}>
-            <span>Spannung U {mode === "vary-resistance" && "· konstant"}</span>
-            <strong>{voltage} V</strong>
-            <input
-              type="range"
-              min="4"
-              max="24"
-              step="1"
-              value={voltage}
-              disabled={mode === "vary-resistance"}
-              onChange={(event) => setVoltage(Number(event.target.value))}
-            />
-          </label>
+          <LabSlider
+            label="Spannung"
+            symbol="U"
+            value={voltage}
+            unit="V"
+            min={4}
+            max={24}
+            disabled={mode === "vary-resistance"}
+            onChange={setVoltage}
+          />
 
-          <label className={mode === "vary-voltage" ? "locked-control" : ""}>
-            <span>Widerstand R {mode === "vary-voltage" && "· konstant"}</span>
-            <strong>{resistance} Ω</strong>
-            <input
-              type="range"
-              min="2"
-              max="12"
-              step="1"
-              value={resistance}
-              disabled={mode === "vary-voltage"}
-              onChange={(event) => setResistance(Number(event.target.value))}
-            />
-          </label>
+          <LabSlider
+            label="Widerstand"
+            symbol="R"
+            value={resistance}
+            unit="Ω"
+            min={2}
+            max={12}
+            disabled={mode === "vary-voltage"}
+            onChange={setResistance}
+          />
 
-          <div className="meter">
-            <span>berechnete Stromstärke</span>
-            <strong>{current.toFixed(2)} A</strong>
-            <small>I = U / R</small>
-          </div>
+          <DigitalMeter
+            label="berechnete Stromstärke"
+            value={`${current.toFixed(2)} A`}
+            formula="I = U / R"
+          />
 
           <button className="primary-button measure-button" onClick={recordMeasurement}>
             Messwert aufnehmen
@@ -139,14 +137,11 @@ export function ResistanceLab() {
         </div>
       </div>
 
-      <div className="lab-challenge">
-        <strong>Forscherauftrag</strong>
-        <span>
-          {mode === "vary-resistance"
-            ? "Verändere R schrittweise und speichere mindestens vier Messwerte. Was geschieht mit I, wenn R größer wird?"
-            : "Verändere U schrittweise und speichere mindestens vier Messwerte. Vergleiche die Stromstärken bei gleichem R."}
-        </span>
-      </div>
+      <ResearchTask>
+        {mode === "vary-resistance"
+          ? "Verändere R schrittweise und speichere mindestens vier Messwerte. Was geschieht mit I, wenn R größer wird?"
+          : "Verändere U schrittweise und speichere mindestens vier Messwerte. Vergleiche die Stromstärken bei gleichem R."}
+      </ResearchTask>
 
       <div className="measurement-section">
         <div className="measurement-heading">
@@ -161,50 +156,32 @@ export function ResistanceLab() {
           )}
         </div>
 
-        {measurements.length === 0 ? (
-          <div className="empty-measurements">
-            Noch keine Messung gespeichert. Stelle den aktiven Regler ein und nimm deinen ersten
-            Messwert auf.
-          </div>
-        ) : (
-          <>
-            <div className="table-wrap">
-              <table className="measurement-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>U</th>
-                    <th>R</th>
-                    <th>I</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {measurements.map((row, index) => (
-                    <tr key={row.id}>
-                      <td>{index + 1}</td>
-                      <td>{row.voltage} V</td>
-                      <td>{row.resistance} Ω</td>
-                      <td>{row.current.toFixed(2)} A</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        <MeasurementTable
+          rows={measurements}
+          emptyText="Noch keine Messung gespeichert. Stelle den aktiven Regler ein und nimm deinen ersten Messwert auf."
+          columns={[
+            { key: "u", label: "U", render: (row) => `${row.voltage} V` },
+            { key: "r", label: "R", render: (row) => `${row.resistance} Ω` },
+            { key: "i", label: "I", render: (row) => `${row.current.toFixed(2)} A` },
+          ]}
+        />
 
-            <div className="chart-section">
-              <div>
-                <div className="eyebrow">Diagramm</div>
-                <h3>
-                  {mode === "vary-resistance" ? "Stromstärke in Abhängigkeit von R" : "Stromstärke in Abhängigkeit von U"}
-                </h3>
-              </div>
-              <MeasurementChart
-                points={chartPoints}
-                xLabel={mode === "vary-resistance" ? "R (Ω)" : "U (V)"}
-                yLabel="I (A)"
-              />
+        {measurements.length > 0 && (
+          <div className="chart-section">
+            <div>
+              <div className="eyebrow">Diagramm</div>
+              <h3>
+                {mode === "vary-resistance"
+                  ? "Stromstärke in Abhängigkeit von R"
+                  : "Stromstärke in Abhängigkeit von U"}
+              </h3>
             </div>
-          </>
+            <MeasurementChart
+              points={chartPoints}
+              xLabel={mode === "vary-resistance" ? "R (Ω)" : "U (V)"}
+              yLabel="I (A)"
+            />
+          </div>
         )}
       </div>
 
