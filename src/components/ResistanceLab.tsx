@@ -1,18 +1,38 @@
 import { useMemo, useState } from "react";
 
+type Measurement = {
+  id: number;
+  voltage: number;
+  resistance: number;
+  current: number;
+};
+
 export function ResistanceLab() {
   const [voltage, setVoltage] = useState(12);
   const [resistance, setResistance] = useState(4);
+  const [measurements, setMeasurements] = useState<Measurement[]>([]);
 
   const current = useMemo(() => voltage / resistance, [voltage, resistance]);
   const electronCount = Math.max(2, Math.min(18, Math.round(current * 2)));
+
+  function recordMeasurement() {
+    setMeasurements((rows) => [
+      ...rows,
+      {
+        id: Date.now(),
+        voltage,
+        resistance,
+        current,
+      },
+    ].slice(-8));
+  }
 
   return (
     <section className="lab-card">
       <div className="eyebrow">Virtuelles Experiment</div>
       <h2>Widerstands-Labor</h2>
       <p className="lead">
-        Verändere Spannung und Widerstand. Beobachte, wie sich die berechnete Stromstärke verändert.
+        Verändere Spannung und Widerstand, lies die Stromstärke ab und speichere eigene Messreihen.
         Grundlage ist der Zusammenhang <strong>R = U / I</strong>.
       </p>
 
@@ -49,6 +69,10 @@ export function ResistanceLab() {
             <strong>{current.toFixed(2)} A</strong>
             <small>I = U / R</small>
           </div>
+
+          <button className="primary-button measure-button" onClick={recordMeasurement}>
+            Messwert aufnehmen
+          </button>
         </div>
 
         <div className="simulation-panel">
@@ -67,8 +91,8 @@ export function ResistanceLab() {
             ))}
           </div>
           <p>
-            Mehr angezeigte Elektronen passieren den markierten Querschnitt in derselben Zeit, wenn
-            die Stromstärke größer ist.
+            Die Animation visualisiert: Bei größerer Stromstärke passieren in derselben Zeit mehr
+            Elektronen den markierten Leiterquerschnitt.
           </p>
         </div>
       </div>
@@ -76,17 +100,53 @@ export function ResistanceLab() {
       <div className="lab-challenge">
         <strong>Forscherauftrag</strong>
         <span>
-          Halte U gleich und erhöhe R. Was beobachtest du bei I? Danach halte R gleich und erhöhe U.
+          1. Halte U gleich und erhöhe R schrittweise. Speichere mindestens drei Messwerte.
+          2. Halte danach R gleich und verändere U. Vergleiche beide Messreihen.
         </span>
       </div>
 
-      <details className="teacher-note">
-        <summary>Fachliche Grundlage</summary>
-        <p>
-          Quellen: P3-FD-038, P3-K3-S048-M02 und P3-K3-S046-M02. Die Animation ist eine
-          Visualisierung der freigegebenen Beziehungen, kein zusätzliches Teilchenmodell.
-        </p>
-      </details>
+      <div className="measurement-section">
+        <div className="measurement-heading">
+          <div>
+            <div className="eyebrow">Messprotokoll</div>
+            <h3>Deine Messwerte</h3>
+          </div>
+          {measurements.length > 0 && (
+            <button className="text-button" onClick={() => setMeasurements([])}>
+              Tabelle leeren
+            </button>
+          )}
+        </div>
+
+        {measurements.length === 0 ? (
+          <div className="empty-measurements">
+            Noch keine Messung gespeichert. Stelle die Regler ein und nimm deinen ersten Messwert auf.
+          </div>
+        ) : (
+          <div className="table-wrap">
+            <table className="measurement-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>U</th>
+                  <th>R</th>
+                  <th>I</th>
+                </tr>
+              </thead>
+              <tbody>
+                {measurements.map((row, index) => (
+                  <tr key={row.id}>
+                    <td>{index + 1}</td>
+                    <td>{row.voltage} V</td>
+                    <td>{row.resistance} Ω</td>
+                    <td>{row.current.toFixed(2)} A</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
