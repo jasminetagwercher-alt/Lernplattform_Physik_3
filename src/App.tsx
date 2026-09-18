@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { ChallengeMix } from "./components/ChallengeMix";
+import { MediaTraining } from "./components/MediaTraining";
 import { MissionEngine } from "./components/MissionEngine";
 import { PhetCircuitLab } from "./components/PhetCircuitLab";
 import { ResistanceLab } from "./components/ResistanceLab";
 import { learningUnits } from "./content/registry";
 import type { ActivityKind, LearningActivity } from "./model";
 
-type View = "home" | "unit" | "mission" | "challenge" | "phet-lab" | "lab";
+type View = "home" | "unit" | "mission" | "challenge" | "media" | "phet-lab" | "lab";
 
 const STORAGE_KEY = "physik3-progress-v1";
 
 const viewByKind: Record<ActivityKind, View> = {
   mission: "mission",
   challenge: "challenge",
+  "media-training": "media",
   "phet-lab": "phet-lab",
   "virtual-lab": "lab",
 };
@@ -20,6 +22,7 @@ const viewByKind: Record<ActivityKind, View> = {
 const iconByKind: Record<ActivityKind, string> = {
   mission: "⌁",
   challenge: "↯",
+  "media-training": "▦",
   "phet-lab": "⚡",
   "virtual-lab": "◉",
 };
@@ -27,6 +30,7 @@ const iconByKind: Record<ActivityKind, string> = {
 const classByKind: Record<ActivityKind, string> = {
   mission: "mission",
   challenge: "challenge",
+  "media-training": "media",
   "phet-lab": "phet",
   "virtual-lab": "lab",
 };
@@ -72,7 +76,7 @@ export default function App() {
             <small>Lernplattform</small>
           </span>
         </button>
-        <div className="status-pill">Aufbauphase · v0.4</div>
+        <div className="status-pill">Aufbauphase · v0.5</div>
       </header>
 
       {view === "home" && (
@@ -183,6 +187,22 @@ export default function App() {
               setView("unit");
             }}
           />
+        </main>
+      )}
+
+      {view === "media" && (
+        <main>
+          <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
+          <section className="toolkit-intro">
+            <div className="eyebrow">LearningApps-artige Vorlagen</div>
+            <h1>Medien-Training</h1>
+            <p>
+              Große Karten, Symbole und später Bilder sind die eigentlichen Lernobjekte. Die
+              Bild-Hotspot- und Puzzle-Komponenten bleiben vorbereitet, bis dafür fachlich geprüfte
+              Grafiken vorliegen.
+            </p>
+          </section>
+          <MediaTraining />
         </main>
       )}
 
