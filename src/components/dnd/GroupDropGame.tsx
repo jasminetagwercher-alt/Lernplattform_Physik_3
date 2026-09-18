@@ -27,50 +27,95 @@ export function GroupDropGame({
   prompt,
   groups,
   tiles,
+  hint = "Vergleiche die Karten noch einmal mit den Überschriften der Zielbereiche.",
 }: {
   title: string;
   prompt: string;
   groups: DropGroup[];
   tiles: GroupTile[];
+  hint?: string;
 }) {
   const bank = useMemo(() => shuffle(tiles), [tiles]);
-  const [placed, setPlaced] = useState<Record<string, string>>({});
+  const [placements, setPlacements] = useState<Record<string, string>>({});
   const [selected, setSelected] = useState<string | null>(null);
-  const [wrongGroup, setWrongGroup] = useState<string | null>(null);
+  const [locked, setLocked] = useState<string[]>([]);
+  const [wrong, setWrong] = useState<string[]>([]);
+  const [attempts, setAttempts] = useState(0);
+  const [score, setScore] = useState(0);
+  const [available, setAvailable] = useState<Record<string, number>>(
+    () => Object.fromEntries(tiles.map((tile) => [tile.id, 3])),
+  );
+  const [showHint, setShowHint] = useState(false);
+  const [solvedBySolution, setSolvedBySolution] = useState(false);
 
-  function attempt(tileId: string, targetId: string) {
-    const id = tileId.replace("tile:", "");
-    const groupId = targetId.replace("group:", "");
-    const tile = tiles.find((item) => item.id === id);
-    if (!tile) return;
+  const maxScore = tiles.length * 3;
+  const allPlaced = tiles.every((tile) => placements[tile.id]);
+  const complete = locked.length === tiles.length;
 
-    if (tile.groupId === groupId) {
-      setPlaced((current) => ({ ...current, [id]: groupId }));
-      setSelected(null);
-      setWrongGroup(null);
-      return;
-    }
+  function place(tileSourceId: string, targetSourceId: string) {
+    const tileId = tileSourceId.replace("tile:", "");
+    const groupId = targetSourceId.replace("group:", "");
+    if (locked.includes(tileId)) return;
 
-    setWrongGroup(groupId);
-    window.setTimeout(() => setWrongGroup(null), 650);
+    setPlacements((current) => ({ ...current, [tileId]: groupId }));
+    setWrong((items) => items.filter((id) => id !== tileId));
+    setSelected(null);
   }
 
   function chooseTarget(groupId: string) {
     if (!selected) return;
-    attempt(`tile:${selected}`, `group:${groupId}`);
+    place(`tile:${selected}`, `group:${groupId}`);
   }
 
-  const done = Object.keys(placed).length === tiles.length;
+  function check() {
+    if (!allPlaced || complete) return;
+
+    const newlyCorrect = tiles
+      .filter((tile) => !locked.includes(tile.id) && placements[tile.id] === tile.groupId)
+      .map((tile) => tile.id);
+    const newlyWrong = tiles
+      .filter((tile) => !locked.includes(tile.id) && placements[tile.id] !== tile.groupId)
+      .map((tile) => tile.id);
+
+    setAttempts((value) => value + 1);
+    setLocked((current) => [...current, ...newlyCorrect]);
+    setWrong(newlyWrong);
+    setScore((value) => value + newlyCorrect.reduce((sum, id) => sum + (available[id] ?? 0), 0));
+    setAvailable((current) => {
+      const next = { ...current };
+      newlyWrong.forEach((id) => {
+        next[id] = Math.max(0, (next[id] ?? 0) - 1);
+      });
+      return next;
+    });
+  }
+
+  function revealSolution() {
+    setPlacements(Object.fromEntries(tiles.map((tile) => [tile.id, tile.groupId])));
+    setLocked(tiles.map((tile) => tile.id));
+    setWrong([]);
+    setAvailable(Object.fromEntries(tiles.map((tile) => [tile.id, 0])));
+    setSolvedBySolution(true);
+    setSelected(null);
+  }
 
   return (
     <section className="game-card dnd-game">
-      <div className="eyebrow">Gruppieren</div>
-      <h2>{title}</h2>
+      <div className="task-topline">
+        <div>
+          <div className="eyebrow">Kacheln zuordnen</div>
+          <h2>{title}</h2>
+        </div>
+        <div className="score-box">
+          <strong>{score}/{maxScore}</strong>
+          <span>Punkte</span>
+        </div>
+      </div>
       <p className="lead compact">{prompt}</p>
 
-      <PointerDragProvider onDrop={attempt}>
+      <PointerDragProvider onDrop={place}>
         <div className="dnd-bank">
-          {bank.map((tile) => !placed[tile.id] && (
+          {bank.map((tile) => !placements[tile.id] && (
             <DraggableMediaTile
               key={tile.id}
               id={`tile:${tile.id}`}
@@ -79,7 +124,10 @@ export function GroupDropGame({
               onClick={() => setSelected(selected === tile.id ? null : tile.id)}
             />
           ))}
-          {done && <div className="dnd-bank-complete">Alle Kacheln sind verteilt.</div>}
+          {allPlaced && !complete && (
+            <div className="dnd-bank-complete neutral">Alle Kacheln liegen. Jetzt erst prüfen.</div>
+          )}
+          {complete && <div className="dnd-bank-complete">Aufgabe abgeschlossen.</div>}
         </div>
 
         <div className="group-drop-grid">
@@ -90,20 +138,32 @@ export function GroupDropGame({
               title={group.title}
               subtitle={group.subtitle}
               active={selected !== null}
-              error={wrongGroup === group.id}
               onClick={() => chooseTarget(group.id)}
             >
               <div className="group-drop-contents">
                 {tiles
-                  .filter((tile) => placed[tile.id] === group.id)
+                  .filter((tile) => placements[tile.id] === group.id)
                   .map((tile) => (
-                    <div className="mini-placed-tile" key={tile.id}>
-                      {tile.media.kind === "symbol" && <strong>{tile.media.symbol}</strong>}
-                      {tile.media.kind === "text" && <span>{tile.media.text}</span>}
-                      {tile.media.kind === "image" && <img src={tile.media.src} alt={tile.media.alt} />}
+                    <div
+                      className={[
+                        "placed-draggable",
+                        locked.includes(tile.id) ? "correct" : "",
+                        wrong.includes(tile.id) ? "wrong" : "",
+                      ].join(" ")}
+                      key={tile.id}
+                    >
+                      <DraggableMediaTile
+                        id={`tile:${tile.id}`}
+                        item={tile.media}
+                        disabled={locked.includes(tile.id)}
+                        selected={selected === tile.id}
+                        onClick={() => {
+                          if (!locked.includes(tile.id)) setSelected(selected === tile.id ? null : tile.id);
+                        }}
+                      />
                     </div>
                   ))}
-                {tiles.filter((tile) => placed[tile.id] === group.id).length === 0 && (
+                {tiles.filter((tile) => placements[tile.id] === group.id).length === 0 && (
                   <span className="empty-zone-copy">Kacheln hier ablegen</span>
                 )}
               </div>
@@ -112,8 +172,32 @@ export function GroupDropGame({
         </div>
       </PointerDragProvider>
 
-      <div className="dnd-help">Falsche Kacheln springen zurück. Richtige bleiben im Zielbereich.</div>
-      {done && <div className="feedback correct">Alles richtig gruppiert.</div>}
+      <div className="assessment-bar">
+        <span>Prüfversuche: {attempts}</span>
+        <span>Pro Kachel sind anfangs 3 Punkte möglich.</span>
+      </div>
+
+      {!complete && (
+        <div className="game-actions assessment-actions">
+          {attempts >= 1 && <button className="text-button" onClick={() => setShowHint(true)}>Hinweis</button>}
+          {attempts >= 3 && <button className="text-button" onClick={revealSolution}>Lösung zeigen</button>}
+          <button className="primary-button" disabled={!allPlaced} onClick={check}>Prüfen</button>
+        </div>
+      )}
+
+      {showHint && !complete && <div className="feedback hint">{hint}</div>}
+      {wrong.length > 0 && !complete && (
+        <div className="feedback hint">
+          {wrong.length} {wrong.length === 1 ? "Kachel liegt" : "Kacheln liegen"} noch falsch. Verschiebe nur diese Kacheln und prüfe erneut.
+        </div>
+      )}
+      {complete && (
+        <div className={solvedBySolution ? "feedback solution" : "feedback correct"}>
+          {solvedBySolution
+            ? `Lösung angezeigt. Dein Ergebnis: ${score} von ${maxScore} Punkten.`
+            : `Geschafft: ${score} von ${maxScore} Punkten.`}
+        </div>
+      )}
     </section>
   );
 }
