@@ -11,8 +11,8 @@ export const electricityUnit: LearningUnit = {
     {
       id: "phet-stromkreis",
       kind: "phet-lab",
-      label: "PhET-Labor",
-      title: "Stromkreis wirklich bauen",
+      label: "Experiment",
+      title: "Stromkreis-Labor",
       description:
         "Baue in PhET mit realistischen Simulationsbauteilen einen Stromkreis, untersuche den Schalter, wechsle zur Schaltbildansicht und miss die Stromstärke.",
       sourceRefs: ["P3-K3-S044-M02", "P3-K3-S045-M01", "P3-K3-S045-M02", "P3-K3-S047-M01", "P3-KOMP-039"],
@@ -20,8 +20,8 @@ export const electricityUnit: LearningUnit = {
     {
       id: "stromcode",
       kind: "mission",
-      label: "Mission",
-      title: "Stromcode",
+      label: "Übung",
+      title: "Grundlagen-Check",
       description:
         "Gemischte Aufgaben mit Hinweisen, plausiblen Fehlantworten und zufälliger Reihenfolge.",
       sourceRefs: ["P3-K3-S044-M01", "P3-K3-S044-M02", "P3-K3-S045-M01", "P3-K3-S046-M02", "P3-K3-S048-M02", "P3-K3-S049-M01"],
@@ -29,25 +29,25 @@ export const electricityUnit: LearningUnit = {
     {
       id: "medien-training",
       kind: "media-training",
-      label: "Medien-Training",
-      title: "Paare · Zuordnen · Gruppieren",
+      label: "Interaktiv",
+      title: "Karten & Zuordnen",
       description:
-        "LearningApps-artige Übungen mit großen Medienkarten statt reiner Wortlisten. Zunächst mit fachlich sicheren Symbolen und Größen.",
+        "Ziehe Karten auf passende Begriffe und ordne sie den richtigen Bereichen zu.",
       sourceRefs: ["P3-K3-S046-M02", "P3-K3-S047-M01", "P3-K3-S048-M02", "P3-K3-S049-M01", "P3-FD-018"],
     },
     {
       id: "challenge-mix",
       kind: "challenge",
-      label: "Challenge-Mix",
-      title: "Ordnen · Sortieren · Fehler finden",
+      label: "Kurztraining",
+      title: "Denken & Prüfen",
       description:
-        "Drei kurze Trainingsformen mit Zuordnung, Sortieren und Fehlvorstellungen.",
+        "Kurze Aufgaben zum Sortieren, Zuordnen und Erkennen typischer Denkfehler.",
       sourceRefs: ["P3-K3-S044-M01", "P3-K3-S045-M01", "P3-K3-S046-M02", "P3-K3-S047-M01", "P3-K3-S048-M02"],
     },
     {
       id: "widerstands-labor",
       kind: "virtual-lab",
-      label: "Eigenes Experiment",
+      label: "Experiment",
       title: "Widerstands-Labor",
       description:
         "Führe kontrollierte Messreihen durch, speichere Messwerte und untersuche automatisch erzeugte Diagramme.",
