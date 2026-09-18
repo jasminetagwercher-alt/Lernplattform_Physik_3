@@ -1,5 +1,5 @@
-import { useDroppable } from "@dnd-kit/react";
 import type { ReactNode } from "react";
+import { usePointerDrag } from "./PointerDragProvider";
 
 export function DroppableZone({
   id,
@@ -20,15 +20,16 @@ export function DroppableZone({
   children?: ReactNode;
   onClick?: () => void;
 }) {
-  const { ref, isDropTarget } = useDroppable({ id });
+  const { overId } = usePointerDrag();
+  const isOver = overId === id;
 
   return (
     <button
-      ref={ref}
       type="button"
+      data-drop-id={id}
       className={[
         "dnd-drop-zone",
-        isDropTarget ? "over" : "",
+        isOver ? "over" : "",
         active ? "active" : "",
         success ? "success" : "",
         error ? "error" : "",
