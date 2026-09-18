@@ -76,7 +76,6 @@ export default function App() {
             <small>Lernplattform</small>
           </span>
         </button>
-        <div className="status-pill">Aufbauphase · v0.5</div>
       </header>
 
       {view === "home" && (
@@ -86,7 +85,7 @@ export default function App() {
               <div className="eyebrow">Physik verstehen · ausprobieren · meistern</div>
               <h1>Dein digitales Physiklabor.</h1>
               <p>
-                Übungen, Missionen und virtuelle Experimente passend zu den Themen aus Physik 3.
+                Übungen und Experimente passend zu den Themen aus Physik 3.
               </p>
             </div>
             <div className="hero-orbit" aria-hidden="true">
@@ -120,14 +119,6 @@ export default function App() {
               ))}
             </div>
 
-            <div className="coming-grid">
-              <div className="coming-card">
-                Neue Einheiten erscheinen künftig automatisch aus dem zentralen Inhaltsregister.
-              </div>
-              <div className="coming-card">
-                Externe hochwertige Simulationen und eigene Mini-Labore werden je nach Thema kombiniert.
-              </div>
-            </div>
           </section>
         </main>
       )}
@@ -194,13 +185,9 @@ export default function App() {
         <main>
           <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
           <section className="toolkit-intro">
-            <div className="eyebrow">LearningApps-artige Vorlagen</div>
-            <h1>Medien-Training</h1>
-            <p>
-              Große Karten, Symbole und später Bilder sind die eigentlichen Lernobjekte. Die
-              Bild-Hotspot- und Puzzle-Komponenten bleiben vorbereitet, bis dafür fachlich geprüfte
-              Grafiken vorliegen.
-            </p>
+            <div className="eyebrow">Interaktiv</div>
+            <h1>Karten & Zuordnen</h1>
+            <p>Ziehe die Kacheln an die richtige Stelle und löse die beiden Aufgaben.</p>
           </section>
           <MediaTraining />
         </main>
@@ -210,12 +197,9 @@ export default function App() {
         <main>
           <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
           <section className="toolkit-intro">
-            <div className="eyebrow">Interaktive Trainingsformen</div>
-            <h1>Challenge-Mix</h1>
-            <p>
-              Dieselben Physikinhalte werden mit unterschiedlichen Spielmechaniken trainiert.
-              Die Komponenten können später in jedem Kapitel wiederverwendet werden.
-            </p>
+            <div className="eyebrow">Kurztraining</div>
+            <h1>Denken & Prüfen</h1>
+            <p>Löse kurze Aufgaben zu Stromstärke und Widerstand.</p>
           </section>
           <ChallengeMix />
         </main>
@@ -228,11 +212,6 @@ export default function App() {
         </main>
       )}
 
-      <footer>
-        Physik 3 · Fachinhalt, Lernaktivität und Darstellung sind getrennt aufgebaut. Komplexe
-        Simulationen werden nur dann selbst entwickelt, wenn dafür ein echter didaktischer Mehrwert
-        besteht.
-      </footer>
     </div>
   );
 }
