@@ -1,63 +1,124 @@
-import { ErrorDetective } from "./games/ErrorDetective";
-import { MatchingGame } from "./games/MatchingGame";
-import { SortingGame } from "./games/SortingGame";
+import { GroupDropGame } from "./dnd/GroupDropGame";
 
 export function ChallengeMix() {
   return (
     <div className="challenge-stack">
-      <MatchingGame
-        title="Stromstärke entschlüsseln"
-        prompt="Ordne Symbol, Einheit und Messgerät richtig zu. Die Karten werden bei jedem Laden neu gemischt."
-        pairs={[
-          { id: "symbol", left: "Symbol der Stromstärke", right: "I" },
-          { id: "unit", left: "Einheit der Stromstärke", right: "Ampere (A)" },
-          { id: "meter", left: "Messgerät für die Stromstärke", right: "Amperemeter" },
+      <GroupDropGame
+        title="Stimmt oder stimmt nicht?"
+        prompt="Ziehe jede Aussage in das passende Feld. Prüfe erst, wenn alle Kacheln liegen."
+        groups={[
+          { id: "true", title: "Stimmt" },
+          { id: "false", title: "Stimmt nicht" },
         ]}
-        hint="Ein Symbol ist kurz, eine Einheit beschreibt den Messwert und ein Messgerät ist ein Gerät."
-        explanation="Stromstärke: Symbol I, Einheit Ampere (A), Messgerät Amperemeter."
-        sourceRefs={["P3-K3-S046-M02", "P3-K3-S047-M01", "P3-FD-018"]}
+        tiles={[
+          {
+            id: "closed",
+            groupId: "true",
+            media: {
+              id: "closed-card",
+              kind: "text",
+              text: "In einem geschlossenen Stromkreis bewegen sich Elektronen durch die Leitungen.",
+            },
+          },
+          {
+            id: "consumed",
+            groupId: "false",
+            media: {
+              id: "consumed-card",
+              kind: "text",
+              text: "Im Elektrogerät wird der Elektronenstrom verbraucht.",
+            },
+          },
+          {
+            id: "source",
+            groupId: "true",
+            media: {
+              id: "source-card",
+              kind: "text",
+              text: "Eine Spannungsquelle hält die Elektronenbewegung aufrecht.",
+            },
+          },
+          {
+            id: "resistance",
+            groupId: "true",
+            media: {
+              id: "resistance-card",
+              kind: "text",
+              text: "Hoher Widerstand bedeutet kleine Stromstärke.",
+            },
+          },
+        ]}
+        hint="Denke an den geschlossenen Stromkreis und daran, ob der Elektronenstrom im Gerät verbraucht wird."
       />
 
-      <SortingGame
-        title="Widerstands-Rennen"
-        prompt="Bei allen drei Leitern bleibt die Spannung gleich. Sortiere von der größten zur kleinsten Stromstärke."
-        items={[
-          { id: "r2", label: "R = 2 Ω" },
-          { id: "r4", label: "R = 4 Ω" },
-          { id: "r8", label: "R = 8 Ω" },
+      <GroupDropGame
+        title="Welche Stromstärke ist größer?"
+        prompt="Die Spannung ist bei allen drei Fällen gleich. Ordne die Widerstandskacheln nach der Größe der Stromstärke."
+        groups={[
+          { id: "largest", title: "größte Stromstärke" },
+          { id: "middle", title: "mittlere Stromstärke" },
+          { id: "smallest", title: "kleinste Stromstärke" },
         ]}
-        correctOrder={["r2", "r4", "r8"]}
-        hint="Je kleiner der Widerstand, desto größer ist bei gleicher Spannung die Stromstärke."
-        explanation="Kleiner Widerstand bedeutet größere Stromstärke; hoher Widerstand bedeutet kleinere Stromstärke."
-        sourceRefs={["P3-K3-S048-M02", "P3-KOMP-044"]}
+        tiles={[
+          {
+            id: "r2",
+            groupId: "largest",
+            media: { id: "r2-card", kind: "symbol", symbol: "2 Ω", caption: "Widerstand" },
+          },
+          {
+            id: "r4",
+            groupId: "middle",
+            media: { id: "r4-card", kind: "symbol", symbol: "4 Ω", caption: "Widerstand" },
+          },
+          {
+            id: "r8",
+            groupId: "smallest",
+            media: { id: "r8-card", kind: "symbol", symbol: "8 Ω", caption: "Widerstand" },
+          },
+        ]}
+        hint="Bei gleicher Spannung gilt: Je größer der Widerstand, desto kleiner die Stromstärke."
       />
 
-      <ErrorDetective
-        title="Wer hat den Denkfehler?"
-        prompt="Nur eine Aussage widerspricht den Buchseiten. Finde sie."
-        statements={[
+      <GroupDropGame
+        title="Was beeinflusst den Widerstand?"
+        prompt="Ordne alle Kacheln. Welche Größen werden auf den Buchseiten als Einfluss auf den Widerstand genannt?"
+        groups={[
+          { id: "influence", title: "beeinflusst den Widerstand" },
+          { id: "not", title: "keine genannte Einflussgröße" },
+        ]}
+        tiles={[
           {
-            id: "mia",
-            speaker: "Mia",
-            text: "In einem geschlossenen Stromkreis bewegen sich Elektronen durch die Leitungen.",
-            isError: false,
+            id: "material",
+            groupId: "influence",
+            media: { id: "material-card", kind: "text", text: "Material" },
           },
           {
-            id: "leon",
-            speaker: "Leon",
-            text: "Im Elektrogerät wird der Elektronenstrom verbraucht.",
-            isError: true,
+            id: "length",
+            groupId: "influence",
+            media: { id: "length-card", kind: "text", text: "Länge des Leiters" },
           },
           {
-            id: "dilara",
-            speaker: "Dilara",
-            text: "Eine Spannungsquelle hält die Elektronenbewegung aufrecht.",
-            isError: false,
+            id: "cross",
+            groupId: "influence",
+            media: { id: "cross-card", kind: "text", text: "Querschnitt des Leiters" },
+          },
+          {
+            id: "temperature",
+            groupId: "influence",
+            media: { id: "temperature-card", kind: "text", text: "Temperatur bei reinen Metallen" },
+          },
+          {
+            id: "ampere",
+            groupId: "not",
+            media: { id: "ampere-card", kind: "symbol", symbol: "A", caption: "Ampere" },
+          },
+          {
+            id: "ammeter",
+            groupId: "not",
+            media: { id: "ammeter-card", kind: "text", text: "Amperemeter", caption: "Messgerät" },
           },
         ]}
-        hint="Achte darauf, was laut Buch mit dem Elektronenstrom im geschlossenen Stromkreis passiert."
-        explanation="Der Elektronenstrom wird im Elektrogerät nicht verbraucht."
-        sourceRefs={["P3-K3-S044-M01", "P3-K3-S045-M01", "P3-FD-017"]}
+        hint="Gesucht sind Eigenschaften des Leiters. Einheit und Messgerät gehören nicht dazu."
       />
     </div>
   );
