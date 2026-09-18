@@ -4,4 +4,9 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/Lernplattform_Physik_3/",
+  build: {
+    rollupOptions: {
+      input: "app.html",
+    },
+  },
 });
