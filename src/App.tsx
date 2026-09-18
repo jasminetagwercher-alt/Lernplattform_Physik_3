@@ -187,7 +187,7 @@ export default function App() {
           <section className="toolkit-intro">
             <div className="eyebrow">Interaktiv</div>
             <h1>Karten & Zuordnen</h1>
-            <p>Ziehe die Kacheln an die richtige Stelle und löse die beiden Aufgaben.</p>
+            <p>Ordne Bauteile und Schaltsymbole zu und beschrifte anschließend einen Stromkreis.</p>
           </section>
           <MediaTraining />
         </main>
