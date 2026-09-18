@@ -56,6 +56,7 @@ export function PairDropGame({
       const displaced = Object.entries(next).find(
         ([otherTileId, placedTarget]) => otherTileId !== tileId && placedTarget === targetId,
       );
+      if (displaced && locked.includes(displaced[0])) return current;
       if (displaced) delete next[displaced[0]];
       next[tileId] = targetId;
       return next;
