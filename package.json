@@ -1,12 +1,12 @@
 {
   "name": "lernplattform-physik-3",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.5.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open /app.html",
     "validate:content": "tsx scripts/validate-content.ts",
-    "build": "npm run validate:content && tsc -b && vite build",
+    "build": "npm run validate:content && tsc -b && vite build && cp dist/app.html dist/index.html",
     "preview": "vite preview"
   },
   "dependencies": {
