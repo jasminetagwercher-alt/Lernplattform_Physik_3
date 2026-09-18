@@ -21,51 +21,109 @@ export function PairDropGame({
   title,
   prompt,
   pairs,
+  hint = "Prüfe noch einmal, welche Begriffe fachlich wirklich zusammengehören.",
 }: {
   title: string;
   prompt: string;
   pairs: DropPair[];
+  hint?: string;
 }) {
   const bank = useMemo(() => shuffle(pairs), [pairs]);
   const targets = useMemo(() => shuffle(pairs), [pairs]);
-  const [matched, setMatched] = useState<string[]>([]);
+  const [placements, setPlacements] = useState<Record<string, string>>({});
   const [selected, setSelected] = useState<string | null>(null);
-  const [wrongTarget, setWrongTarget] = useState<string | null>(null);
+  const [locked, setLocked] = useState<string[]>([]);
+  const [wrong, setWrong] = useState<string[]>([]);
+  const [attempts, setAttempts] = useState(0);
+  const [score, setScore] = useState(0);
+  const [available, setAvailable] = useState<Record<string, number>>(
+    () => Object.fromEntries(pairs.map((pair) => [pair.id, 3])),
+  );
+  const [showHint, setShowHint] = useState(false);
+  const [solvedBySolution, setSolvedBySolution] = useState(false);
 
-  function attempt(tileId: string, targetId: string) {
-    const pairId = tileId.replace("tile:", "");
-    const targetPairId = targetId.replace("target:", "");
+  const maxScore = pairs.length * 3;
+  const complete = locked.length === pairs.length;
+  const allPlaced = pairs.every((pair) => placements[pair.id]);
 
-    if (pairId === targetPairId) {
-      setMatched((current) => current.includes(pairId) ? current : [...current, pairId]);
-      setSelected(null);
-      setWrongTarget(null);
-      return;
-    }
+  function place(tileSourceId: string, targetSourceId: string) {
+    const tileId = tileSourceId.replace("tile:", "");
+    const targetId = targetSourceId.replace("target:", "");
+    if (locked.includes(tileId)) return;
 
-    setWrongTarget(targetPairId);
-    window.setTimeout(() => setWrongTarget(null), 650);
+    setPlacements((current) => {
+      const next = { ...current };
+      const displaced = Object.entries(next).find(
+        ([otherTileId, placedTarget]) => otherTileId !== tileId && placedTarget === targetId,
+      );
+      if (displaced) delete next[displaced[0]];
+      next[tileId] = targetId;
+      return next;
+    });
+    setWrong((items) => items.filter((id) => id !== tileId));
+    setSelected(null);
   }
 
   function chooseTile(id: string) {
-    if (matched.includes(id)) return;
+    if (locked.includes(id)) return;
     setSelected(selected === id ? null : id);
   }
 
   function chooseTarget(id: string) {
     if (!selected) return;
-    attempt(`tile:${selected}`, `target:${id}`);
+    place(`tile:${selected}`, `target:${id}`);
+  }
+
+  function check() {
+    if (!allPlaced || complete) return;
+
+    const newlyCorrect = pairs
+      .filter((pair) => !locked.includes(pair.id) && placements[pair.id] === pair.id)
+      .map((pair) => pair.id);
+    const newlyWrong = pairs
+      .filter((pair) => !locked.includes(pair.id) && placements[pair.id] !== pair.id)
+      .map((pair) => pair.id);
+
+    setAttempts((value) => value + 1);
+    setLocked((current) => [...current, ...newlyCorrect]);
+    setWrong(newlyWrong);
+    setScore((value) => value + newlyCorrect.reduce((sum, id) => sum + (available[id] ?? 0), 0));
+    setAvailable((current) => {
+      const next = { ...current };
+      newlyWrong.forEach((id) => {
+        next[id] = Math.max(0, (next[id] ?? 0) - 1);
+      });
+      return next;
+    });
+  }
+
+  function revealSolution() {
+    const next = Object.fromEntries(pairs.map((pair) => [pair.id, pair.id]));
+    setPlacements(next);
+    setLocked(pairs.map((pair) => pair.id));
+    setWrong([]);
+    setAvailable(Object.fromEntries(pairs.map((pair) => [pair.id, 0])));
+    setSolvedBySolution(true);
+    setSelected(null);
   }
 
   return (
     <section className="game-card dnd-game">
-      <div className="eyebrow">Paare zuordnen</div>
-      <h2>{title}</h2>
+      <div className="task-topline">
+        <div>
+          <div className="eyebrow">Paare zuordnen</div>
+          <h2>{title}</h2>
+        </div>
+        <div className="score-box">
+          <strong>{score}/{maxScore}</strong>
+          <span>Punkte</span>
+        </div>
+      </div>
       <p className="lead compact">{prompt}</p>
 
-      <PointerDragProvider onDrop={attempt}>
+      <PointerDragProvider onDrop={place}>
         <div className="dnd-bank" aria-label="Kacheln">
-          {bank.map((pair) => !matched.includes(pair.id) && (
+          {bank.map((pair) => !placements[pair.id] && (
             <DraggableMediaTile
               key={pair.id}
               id={`tile:${pair.id}`}
@@ -74,35 +132,81 @@ export function PairDropGame({
               onClick={() => chooseTile(pair.id)}
             />
           ))}
-          {matched.length === pairs.length && (
-            <div className="dnd-bank-complete">Alle Kacheln sind zugeordnet.</div>
+          {allPlaced && !complete && (
+            <div className="dnd-bank-complete neutral">Alle Kacheln liegen. Jetzt erst prüfen.</div>
+          )}
+          {complete && (
+            <div className="dnd-bank-complete">Aufgabe abgeschlossen.</div>
           )}
         </div>
 
         <div className="pair-target-grid">
-          {targets.map((pair) => (
-            <DroppableZone
-              key={pair.id}
-              id={`target:${pair.id}`}
-              title={pair.targetTitle}
-              active={selected !== null}
-              success={matched.includes(pair.id)}
-              error={wrongTarget === pair.id}
-              onClick={() => chooseTarget(pair.id)}
-            >
-              <div className="drop-target-media">
-                {pair.target.kind === "symbol" && <span className="target-symbol">{pair.target.symbol}</span>}
-                {pair.target.kind === "text" && <span>{pair.target.text}</span>}
-                {pair.target.kind === "image" && <img src={pair.target.src} alt={pair.target.alt} />}
-                {matched.includes(pair.id) && <span className="drop-check">✓</span>}
-              </div>
-            </DroppableZone>
-          ))}
+          {targets.map((target) => {
+            const placedTileId = Object.entries(placements).find(([, targetId]) => targetId === target.id)?.[0];
+            const placedPair = pairs.find((pair) => pair.id === placedTileId);
+            const isLocked = placedTileId ? locked.includes(placedTileId) : false;
+            const isWrong = placedTileId ? wrong.includes(placedTileId) : false;
+
+            return (
+              <DroppableZone
+                key={target.id}
+                id={`target:${target.id}`}
+                title={target.targetTitle}
+                active={selected !== null}
+                success={Boolean(placedTileId && isLocked && placedTileId === target.id)}
+                error={Boolean(isWrong)}
+                onClick={() => chooseTarget(target.id)}
+              >
+                <div className="pair-answer-zone">
+                  <div className="target-reference">
+                    {target.target.kind === "symbol" && <span className="target-symbol">{target.target.symbol}</span>}
+                    {target.target.kind === "text" && <span>{target.target.text}</span>}
+                    {target.target.kind === "image" && <img src={target.target.src} alt={target.target.alt} />}
+                  </div>
+                  {placedPair ? (
+                    <DraggableMediaTile
+                      id={`tile:${placedPair.id}`}
+                      item={placedPair.tile}
+                      disabled={isLocked}
+                      selected={selected === placedPair.id}
+                      onClick={() => chooseTile(placedPair.id)}
+                    />
+                  ) : (
+                    <span className="empty-zone-copy">Kachel hier ablegen</span>
+                  )}
+                </div>
+              </DroppableZone>
+            );
+          })}
         </div>
       </PointerDragProvider>
 
-      <div className="dnd-help">Kachel ziehen oder antippen und anschließend ein Ziel wählen.</div>
-      {matched.length === pairs.length && <div className="feedback correct">Alle Paare stimmen.</div>}
+      <div className="assessment-bar">
+        <span>Prüfversuche: {attempts}</span>
+        <span>Pro Zuordnung sind anfangs 3 Punkte möglich.</span>
+      </div>
+
+      {!complete && (
+        <div className="game-actions assessment-actions">
+          {attempts >= 1 && <button className="text-button" onClick={() => setShowHint(true)}>Hinweis</button>}
+          {attempts >= 3 && <button className="text-button" onClick={revealSolution}>Lösung zeigen</button>}
+          <button className="primary-button" disabled={!allPlaced} onClick={check}>Prüfen</button>
+        </div>
+      )}
+
+      {showHint && !complete && <div className="feedback hint">{hint}</div>}
+      {wrong.length > 0 && !complete && (
+        <div className="feedback hint">
+          {wrong.length} {wrong.length === 1 ? "Zuordnung stimmt" : "Zuordnungen stimmen"} noch nicht. Korrigiere nur diese Kacheln und prüfe erneut.
+        </div>
+      )}
+      {complete && (
+        <div className={solvedBySolution ? "feedback solution" : "feedback correct"}>
+          {solvedBySolution
+            ? `Lösung angezeigt. Dein Ergebnis: ${score} von ${maxScore} Punkten.`
+            : `Geschafft: ${score} von ${maxScore} Punkten.`}
+        </div>
+      )}
     </section>
   );
 }
