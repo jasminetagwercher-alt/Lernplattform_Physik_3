@@ -27,7 +27,7 @@ export function DraggableMediaTile({
     <div
       className={`dnd-tile-shell ${dragging ? "dragging" : ""} ${disabled ? "locked" : ""}`}
       onPointerDown={handlePointerDown}
-      onClick={disabled ? undefined : onClick}
+      onClick={disabled || !onClick ? undefined : (event) => { event.stopPropagation(); onClick(); }}
     >
       <MediaCard item={item} selected={selected} matched={disabled} />
     </div>
