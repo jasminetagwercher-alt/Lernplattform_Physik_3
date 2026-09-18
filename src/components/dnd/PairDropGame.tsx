@@ -1,8 +1,8 @@
-import { DragDropProvider } from "@dnd-kit/react";
 import { useMemo, useState } from "react";
 import type { MediaItem } from "../media/MediaCard";
-import { DraggableMediaTile, MediaDragOverlay } from "./DraggableMediaTile";
+import { DraggableMediaTile } from "./DraggableMediaTile";
 import { DroppableZone } from "./DroppableZone";
+import { PointerDragProvider } from "./PointerDragProvider";
 
 export type DropPair = {
   id: string;
@@ -31,8 +31,6 @@ export function PairDropGame({
   const [matched, setMatched] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [wrongTarget, setWrongTarget] = useState<string | null>(null);
-
-  const tileMedia = Object.fromEntries(pairs.map((pair) => [`tile:${pair.id}`, pair.tile]));
 
   function attempt(tileId: string, targetId: string) {
     const pairId = tileId.replace("tile:", "");
@@ -65,16 +63,7 @@ export function PairDropGame({
       <h2>{title}</h2>
       <p className="lead compact">{prompt}</p>
 
-      <DragDropProvider
-        onDragEnd={(event: any) => {
-          if (event.canceled) return;
-          const sourceId = String(event.operation.source?.id ?? "");
-          const targetId = String(event.operation.target?.id ?? "");
-          if (sourceId.startsWith("tile:") && targetId.startsWith("target:")) {
-            attempt(sourceId, targetId);
-          }
-        }}
-      >
+      <PointerDragProvider onDrop={attempt}>
         <div className="dnd-bank" aria-label="Kacheln">
           {bank.map((pair) => !matched.includes(pair.id) && (
             <DraggableMediaTile
@@ -110,9 +99,7 @@ export function PairDropGame({
             </DroppableZone>
           ))}
         </div>
-
-        <MediaDragOverlay items={tileMedia} />
-      </DragDropProvider>
+      </PointerDragProvider>
 
       <div className="dnd-help">Kachel ziehen oder antippen und anschließend ein Ziel wählen.</div>
       {matched.length === pairs.length && <div className="feedback correct">Alle Paare stimmen.</div>}
