@@ -1,7 +1,7 @@
 {
   "name": "lernplattform-physik-3",
   "private": true,
-  "version": "0.5.1",
+  "version": "0.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite --open /app.html",
@@ -14,7 +14,8 @@
     "vite": "^7.1.7",
     "typescript": "^5.9.2",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "@dnd-kit/react": "^0.5.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.16",
