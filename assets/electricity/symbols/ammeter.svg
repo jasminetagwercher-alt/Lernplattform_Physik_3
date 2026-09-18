@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240">
+  <rect width="360" height="240" rx="28" fill="#0b1628"/><g fill="none" stroke="#eef5fb" stroke-width="8" stroke-linecap="round">
+  <path d="M40 120h82M238 120h82"/><circle cx="180" cy="120" r="58"/></g>
+  <text x="180" y="140" text-anchor="middle" fill="#eef5fb" font-size="58" font-family="Arial" font-weight="700">A</text>
+</svg>
