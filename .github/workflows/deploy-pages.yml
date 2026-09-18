@@ -12,9 +12,6 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: validate-build-publish
-  cancel-in-progress: true
 
 jobs:
   validate-build-publish:
