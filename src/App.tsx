@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { ChallengeMix } from "./components/ChallengeMix";
 import { MissionEngine } from "./components/MissionEngine";
 import { ResistanceLab } from "./components/ResistanceLab";
 import { electricityUnit } from "./content/electricity";
 
-type View = "home" | "unit" | "mission" | "lab";
+type View = "home" | "unit" | "mission" | "challenge" | "lab";
 
 const STORAGE_KEY = "physik3-progress-v1";
 
@@ -35,7 +36,7 @@ export default function App() {
             <small>Lernplattform</small>
           </span>
         </button>
-        <div className="status-pill">Aufbauphase · v0.1</div>
+        <div className="status-pill">Aufbauphase · v0.2</div>
       </header>
 
       {view === "home" && (
@@ -77,7 +78,7 @@ export default function App() {
 
             <div className="coming-grid">
               <div className="coming-card">Weitere Kapitel werden hier automatisch ergänzt.</div>
-              <div className="coming-card">Später: Kapiteltraining · Boss-Level · Lernfortschritt</div>
+              <div className="coming-card">Nächste Ausbaustufe: Circuit Builder · Hotspots · Boss-Level</div>
             </div>
           </section>
         </main>
@@ -104,12 +105,22 @@ export default function App() {
               </div>
             </button>
 
+            <button className="activity-card challenge" onClick={() => setView("challenge")}>
+              <span className="activity-icon">↯</span>
+              <div>
+                <div className="eyebrow">Challenge-Mix</div>
+                <h2>Ordnen · Sortieren · Fehler finden</h2>
+                <p>Drei neue Interaktionstypen zum Ausprobieren: Drag & Drop, Sortieraufgabe und Fehlerdetektiv.</p>
+                <strong>Challenges öffnen →</strong>
+              </div>
+            </button>
+
             <button className="activity-card lab" onClick={() => setView("lab")}>
               <span className="activity-icon">◉</span>
               <div>
                 <div className="eyebrow">Experiment</div>
                 <h2>Widerstands-Labor</h2>
-                <p>Regler verändern, Messwerte beobachten und physikalische Zusammenhänge untersuchen.</p>
+                <p>Kontrollierte Messreihen durchführen, Messwerte speichern und automatisch als Diagramm darstellen.</p>
                 <strong>Experiment öffnen →</strong>
               </div>
             </button>
@@ -130,6 +141,21 @@ export default function App() {
         </main>
       )}
 
+      {view === "challenge" && (
+        <main>
+          <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
+          <section className="toolkit-intro">
+            <div className="eyebrow">Interaktive Trainingsformen</div>
+            <h1>Challenge-Mix</h1>
+            <p>
+              Dieselben Physikinhalte werden hier mit unterschiedlichen Spielmechaniken trainiert.
+              Die Komponenten können später in jedem Kapitel wiederverwendet werden.
+            </p>
+          </section>
+          <ChallengeMix />
+        </main>
+      )}
+
       {view === "lab" && (
         <main>
           <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
@@ -138,7 +164,7 @@ export default function App() {
       )}
 
       <footer>
-        Physik 3 · Inhalte und Spielmechanik sind getrennt aufgebaut, damit die Plattform Kapitel für Kapitel wachsen kann.
+        Physik 3 · Inhalte, Spielmechanik und virtuelle Experimente sind getrennt aufgebaut, damit die Plattform Kapitel für Kapitel wachsen kann.
       </footer>
     </div>
   );
