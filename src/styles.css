@@ -394,3 +394,286 @@ footer { color: #718199; font-size: .82rem; border-top: 1px solid var(--line); p
 }
 
 .measurement-table tbody tr:last-child td { border-bottom: 0; }
+
+
+.activity-card.challenge {
+  background: linear-gradient(145deg, #1c263d, #18283b);
+}
+
+.toolkit-intro {
+  padding: 34px 0 18px;
+}
+
+.toolkit-intro h1 {
+  font-size: clamp(2.5rem, 6vw, 4.8rem);
+  letter-spacing: -.05em;
+  margin: 8px 0 10px;
+}
+
+.toolkit-intro p {
+  color: var(--muted);
+  max-width: 760px;
+  line-height: 1.6;
+}
+
+.challenge-stack {
+  display: grid;
+  gap: 22px;
+  margin-bottom: 42px;
+}
+
+.game-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: clamp(22px, 4vw, 36px);
+  background: rgba(15,29,50,.96);
+  box-shadow: 0 22px 65px rgba(0,0,0,.18);
+}
+
+.game-card h2 {
+  margin: 8px 0 10px;
+  font-size: clamp(1.6rem, 3vw, 2.35rem);
+}
+
+.lead.compact {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.game-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.matching-layout {
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.matching-column {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.match-token {
+  border: 1px solid rgba(164,135,255,.38);
+  border-radius: 13px;
+  background: #172540;
+  padding: 13px 14px;
+  text-align: left;
+  cursor: grab;
+}
+
+.match-token.selected {
+  border-color: var(--violet);
+  background: #28254d;
+  box-shadow: 0 0 0 2px rgba(164,135,255,.1) inset;
+}
+
+.match-slot {
+  min-height: 76px;
+  display: grid;
+  grid-template-columns: 1fr minmax(150px, .9fr);
+  align-items: center;
+  gap: 14px;
+  border: 1px dashed rgba(91,227,255,.4);
+  background: rgba(91,227,255,.035);
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.match-slot strong {
+  color: #dce6f2;
+}
+
+.match-slot span {
+  min-height: 42px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  color: #c1cede;
+  text-align: center;
+}
+
+.sort-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sort-row {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #12243d;
+  padding: 11px 12px;
+  cursor: grab;
+}
+
+.sort-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(91,227,255,.11);
+  color: var(--cyan);
+  font-weight: 900;
+}
+
+.sort-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.sort-controls button {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  cursor: pointer;
+}
+
+.statement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.statement-card {
+  min-height: 170px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #13243d;
+  padding: 17px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statement-card span {
+  color: var(--cyan);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.statement-card strong {
+  line-height: 1.5;
+}
+
+.statement-card.selected {
+  border-color: var(--yellow);
+  background: #2b2a35;
+  box-shadow: 0 0 0 2px rgba(255,211,107,.08) inset;
+}
+
+.experiment-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.experiment-mode button {
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 14px;
+  background: #102039;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 850;
+}
+
+.experiment-mode button small {
+  display: block;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.experiment-mode button.selected {
+  border-color: var(--cyan);
+  background: #173447;
+}
+
+.locked-control {
+  opacity: .65;
+}
+
+.chart-section {
+  margin-top: 22px;
+}
+
+.chart-section h3 {
+  margin: 6px 0 12px;
+}
+
+.chart-card,
+.chart-empty {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #091727;
+  padding: 12px;
+}
+
+.chart-empty {
+  color: var(--muted);
+}
+
+.chart-card svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart-axis {
+  stroke: rgba(255,255,255,.4);
+  stroke-width: 2;
+}
+
+.chart-line {
+  stroke: var(--violet);
+  stroke-width: 4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-point {
+  fill: var(--cyan);
+  stroke: #07111f;
+  stroke-width: 3;
+}
+
+.chart-label {
+  fill: #aab7c9;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .matching-layout,
+  .statement-grid,
+  .experiment-mode {
+    grid-template-columns: 1fr;
+  }
+
+  .match-slot {
+    grid-template-columns: 1fr;
+  }
+}
