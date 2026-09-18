@@ -1785,3 +1785,26 @@ footer { color: #718199; font-size: .82rem; border-top: 1px solid var(--line); p
     animation: none !important;
   }
 }
+
+
+.pointer-dragging {
+  cursor: grabbing !important;
+  user-select: none !important;
+  overscroll-behavior: none;
+}
+
+.pointer-drag-overlay {
+  position: fixed;
+  z-index: 99999;
+  width: min(180px, 36vw);
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(1.5deg) scale(1.04);
+  filter: drop-shadow(0 24px 28px rgba(0,0,0,.36));
+  will-change: left, top;
+}
+
+.pointer-drag-overlay .media-card {
+  border-color: var(--cyan);
+  background: linear-gradient(145deg, #193c50, #172545);
+  box-shadow: 0 0 0 3px rgba(91,227,255,.1) inset;
+}
