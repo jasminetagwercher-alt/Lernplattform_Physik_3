@@ -1,5 +1,6 @@
-import { DragOverlay, useDraggable } from "@dnd-kit/react";
+import type { PointerEvent } from "react";
 import { MediaCard, type MediaItem } from "../media/MediaCard";
+import { usePointerDrag } from "./PointerDragProvider";
 
 export function DraggableMediaTile({
   id,
@@ -14,34 +15,21 @@ export function DraggableMediaTile({
   disabled?: boolean;
   onClick?: () => void;
 }) {
-  const { ref, isDragging } = useDraggable({ id, disabled });
+  const { activeId, startDrag } = usePointerDrag();
+  const dragging = activeId === id;
+
+  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (disabled) return;
+    startDrag(id, item, event);
+  }
 
   return (
     <div
-      ref={ref}
-      className={`dnd-tile-shell ${isDragging ? "dragging" : ""} ${disabled ? "locked" : ""}`}
+      className={`dnd-tile-shell ${dragging ? "dragging" : ""} ${disabled ? "locked" : ""}`}
+      onPointerDown={handlePointerDown}
+      onClick={disabled ? undefined : onClick}
     >
-      <MediaCard item={item} selected={selected} matched={disabled} onClick={onClick} />
+      <MediaCard item={item} selected={selected} matched={disabled} />
     </div>
-  );
-}
-
-export function MediaDragOverlay({
-  items,
-}: {
-  items: Record<string, MediaItem>;
-}) {
-  return (
-    <DragOverlay>
-      {(source) => {
-        const item = items[String(source.id)];
-        if (!item) return null;
-        return (
-          <div className="dnd-overlay-card">
-            <MediaCard item={item} />
-          </div>
-        );
-      }}
-    </DragOverlay>
   );
 }
