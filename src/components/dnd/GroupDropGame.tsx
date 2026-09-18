@@ -1,8 +1,8 @@
-import { DragDropProvider } from "@dnd-kit/react";
 import { useMemo, useState } from "react";
 import type { MediaItem } from "../media/MediaCard";
-import { DraggableMediaTile, MediaDragOverlay } from "./DraggableMediaTile";
+import { DraggableMediaTile } from "./DraggableMediaTile";
 import { DroppableZone } from "./DroppableZone";
+import { PointerDragProvider } from "./PointerDragProvider";
 
 export type DropGroup = {
   id: string;
@@ -38,8 +38,6 @@ export function GroupDropGame({
   const [selected, setSelected] = useState<string | null>(null);
   const [wrongGroup, setWrongGroup] = useState<string | null>(null);
 
-  const tileMedia = Object.fromEntries(tiles.map((tile) => [`tile:${tile.id}`, tile.media]));
-
   function attempt(tileId: string, targetId: string) {
     const id = tileId.replace("tile:", "");
     const groupId = targetId.replace("group:", "");
@@ -70,16 +68,7 @@ export function GroupDropGame({
       <h2>{title}</h2>
       <p className="lead compact">{prompt}</p>
 
-      <DragDropProvider
-        onDragEnd={(event: any) => {
-          if (event.canceled) return;
-          const sourceId = String(event.operation.source?.id ?? "");
-          const targetId = String(event.operation.target?.id ?? "");
-          if (sourceId.startsWith("tile:") && targetId.startsWith("group:")) {
-            attempt(sourceId, targetId);
-          }
-        }}
-      >
+      <PointerDragProvider onDrop={attempt}>
         <div className="dnd-bank">
           {bank.map((tile) => !placed[tile.id] && (
             <DraggableMediaTile
@@ -121,9 +110,7 @@ export function GroupDropGame({
             </DroppableZone>
           ))}
         </div>
-
-        <MediaDragOverlay items={tileMedia} />
-      </DragDropProvider>
+      </PointerDragProvider>
 
       <div className="dnd-help">Falsche Kacheln springen zurück. Richtige bleiben im Zielbereich.</div>
       {done && <div className="feedback correct">Alles richtig gruppiert.</div>}
