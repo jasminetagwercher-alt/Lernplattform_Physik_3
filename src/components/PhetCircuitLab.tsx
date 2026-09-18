@@ -56,10 +56,10 @@ export function PhetCircuitLab({ onComplete }: { onComplete?: () => void }) {
     <section className="phet-lab">
       <header className="phet-header">
         <div>
-          <div className="eyebrow">PhET-Labor · S. 44–47</div>
-          <h1>Stromkreis wirklich bauen</h1>
+          <div className="eyebrow">Experiment · S. 44–47</div>
+          <h1>Stromkreis-Labor</h1>
           <p>
-            Arbeite direkt in der Simulation. Baue den Stromkreis aus echten Simulationsbauteilen,
+            Arbeite direkt in der Simulation. Baue einen Stromkreis mit den Simulationsbauteilen,
             beobachte den Schalter und wechsle anschließend zur Schaltbildansicht.
           </p>
         </div>
