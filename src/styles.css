@@ -967,3 +967,231 @@ footer { color: #718199; font-size: .82rem; border-top: 1px solid var(--line); p
     transform: translateX(50%);
   }
 }
+
+
+.activity-card.phet {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(255,211,107,.12), transparent 34%),
+    linear-gradient(145deg, #102638, #15233b);
+}
+
+.phet-lab {
+  margin: 12px 0 44px;
+}
+
+.phet-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: end;
+  padding: 32px 0 22px;
+}
+
+.phet-header h1 {
+  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  letter-spacing: -.05em;
+  line-height: .98;
+  margin: 8px 0 12px;
+}
+
+.phet-header p {
+  color: var(--muted);
+  max-width: 780px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.phet-progress {
+  min-width: 130px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.05);
+  border-radius: 18px;
+  padding: 15px;
+  text-align: center;
+}
+
+.phet-progress strong {
+  display: block;
+  color: var(--cyan);
+  font-size: 1.8rem;
+}
+
+.phet-progress span {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.phet-layout {
+  display: grid;
+  grid-template-columns: minmax(290px, .42fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.research-panel,
+.lab-evaluation {
+  border: 1px solid var(--line);
+  background: rgba(15,29,50,.96);
+  border-radius: 22px;
+  padding: 20px;
+}
+
+.research-panel {
+  position: sticky;
+  top: 14px;
+}
+
+.research-panel h2,
+.lab-evaluation h2 {
+  margin: 7px 0 14px;
+}
+
+.research-step {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 11px;
+  align-items: start;
+  border: 1px solid var(--line);
+  background: #11233b;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  margin-top: 9px;
+}
+
+.research-step:hover {
+  border-color: rgba(91,227,255,.38);
+}
+
+.research-step.done {
+  border-color: rgba(98,231,172,.4);
+  background: rgba(98,231,172,.07);
+}
+
+.research-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(91,227,255,.12);
+  color: var(--cyan);
+  font-weight: 950;
+}
+
+.research-step.done .research-number {
+  background: rgba(98,231,172,.15);
+  color: var(--green);
+}
+
+.research-step strong,
+.research-step small {
+  display: block;
+}
+
+.research-step small {
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 4px;
+  font-size: .84rem;
+}
+
+.external-sim-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--cyan);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.simulation-frame-wrap {
+  border: 1px solid var(--line);
+  background: #07111f;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.phet-frame {
+  display: block;
+  width: 100%;
+  min-height: 690px;
+  border: 0;
+  background: white;
+}
+
+.phet-attribution {
+  margin: 0;
+  padding: 10px 14px 13px;
+  border-top: 1px solid var(--line);
+  color: #8494aa;
+  font-size: .72rem;
+  line-height: 1.4;
+}
+
+.lab-evaluation {
+  margin-top: 16px;
+}
+
+.lab-evaluation > p {
+  color: var(--muted);
+}
+
+.evaluation-question {
+  border-top: 1px solid var(--line);
+  padding: 17px 0;
+}
+
+.evaluation-question > strong {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.evaluation-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.evaluation-options button {
+  border: 1px solid var(--line);
+  background: #11233b;
+  border-radius: 12px;
+  padding: 10px 13px;
+  cursor: pointer;
+}
+
+.evaluation-options button.selected {
+  border-color: var(--cyan);
+  background: #17394a;
+  box-shadow: 0 0 0 2px rgba(91,227,255,.07) inset;
+}
+
+@media (max-width: 900px) {
+  .phet-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .research-panel {
+    position: static;
+  }
+
+  .phet-frame {
+    min-height: 610px;
+  }
+}
+
+@media (max-width: 620px) {
+  .phet-header {
+    grid-template-columns: 1fr;
+  }
+
+  .phet-progress {
+    width: 100%;
+  }
+
+  .phet-frame {
+    min-height: 520px;
+  }
+}
