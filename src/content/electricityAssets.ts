@@ -12,7 +12,7 @@ export type PhysicsAsset = {
   usage: string[];
 };
 
-const base = import.meta.env.BASE_URL + "assets/electricity/";
+const base = "/Lernplattform_Physik_3/assets/electricity/";
 
 export const electricityAssets: Record<string, PhysicsAsset> = {
   batteryReal: {
