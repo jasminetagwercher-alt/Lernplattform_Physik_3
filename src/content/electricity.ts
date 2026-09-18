@@ -6,7 +6,45 @@ export const electricityUnit: LearningUnit = {
   title: "Stromkreis, Stromstärke und Widerstand",
   pages: "S. 44–49",
   description:
-    "Rekonstruiere den Stromcode, prüfe typische Fehlvorstellungen und teste den Zusammenhang zwischen Spannung, Stromstärke und Widerstand im virtuellen Labor.",
+    "Experimentiere mit echten Simulationsbauteilen, trainiere zentrale Vorstellungen und untersuche Stromstärke und Widerstand mit Messreihen.",
+  activities: [
+    {
+      id: "phet-stromkreis",
+      kind: "phet-lab",
+      label: "PhET-Labor",
+      title: "Stromkreis wirklich bauen",
+      description:
+        "Baue in PhET mit realistischen Simulationsbauteilen einen Stromkreis, untersuche den Schalter, wechsle zur Schaltbildansicht und miss die Stromstärke.",
+      sourceRefs: ["P3-K3-S044-M02", "P3-K3-S045-M01", "P3-K3-S045-M02", "P3-K3-S047-M01", "P3-KOMP-039"],
+    },
+    {
+      id: "stromcode",
+      kind: "mission",
+      label: "Mission",
+      title: "Stromcode",
+      description:
+        "Gemischte Aufgaben mit Hinweisen, plausiblen Fehlantworten und zufälliger Reihenfolge.",
+      sourceRefs: ["P3-K3-S044-M01", "P3-K3-S044-M02", "P3-K3-S045-M01", "P3-K3-S046-M02", "P3-K3-S048-M02", "P3-K3-S049-M01"],
+    },
+    {
+      id: "challenge-mix",
+      kind: "challenge",
+      label: "Challenge-Mix",
+      title: "Ordnen · Sortieren · Fehler finden",
+      description:
+        "Drei kurze Trainingsformen mit Zuordnung, Sortieren und Fehlvorstellungen.",
+      sourceRefs: ["P3-K3-S044-M01", "P3-K3-S045-M01", "P3-K3-S046-M02", "P3-K3-S047-M01", "P3-K3-S048-M02"],
+    },
+    {
+      id: "widerstands-labor",
+      kind: "virtual-lab",
+      label: "Eigenes Experiment",
+      title: "Widerstands-Labor",
+      description:
+        "Führe kontrollierte Messreihen durch, speichere Messwerte und untersuche automatisch erzeugte Diagramme.",
+      sourceRefs: ["P3-FD-038", "P3-K3-S048-M02", "P3-K3-S046-M02"],
+    },
+  ],
   tasks: [
     {
       id: "p3-k3-044-01",
