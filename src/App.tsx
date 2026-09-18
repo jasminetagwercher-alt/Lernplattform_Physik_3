@@ -1,13 +1,35 @@
 import { useEffect, useState } from "react";
 import { ChallengeMix } from "./components/ChallengeMix";
-import { CircuitWorkshop } from "./components/CircuitWorkshop";
 import { MissionEngine } from "./components/MissionEngine";
+import { PhetCircuitLab } from "./components/PhetCircuitLab";
 import { ResistanceLab } from "./components/ResistanceLab";
 import { learningUnits } from "./content/registry";
+import type { ActivityKind, LearningActivity } from "./model";
 
-type View = "home" | "unit" | "mission" | "challenge" | "workshop" | "lab";
+type View = "home" | "unit" | "mission" | "challenge" | "phet-lab" | "lab";
 
 const STORAGE_KEY = "physik3-progress-v1";
+
+const viewByKind: Record<ActivityKind, View> = {
+  mission: "mission",
+  challenge: "challenge",
+  "phet-lab": "phet-lab",
+  "virtual-lab": "lab",
+};
+
+const iconByKind: Record<ActivityKind, string> = {
+  mission: "⌁",
+  challenge: "↯",
+  "phet-lab": "⚡",
+  "virtual-lab": "◉",
+};
+
+const classByKind: Record<ActivityKind, string> = {
+  mission: "mission",
+  challenge: "challenge",
+  "phet-lab": "phet",
+  "virtual-lab": "lab",
+};
 
 export default function App() {
   const [view, setView] = useState<View>("home");
@@ -36,6 +58,10 @@ export default function App() {
     setView("unit");
   }
 
+  function openActivity(activity: LearningActivity) {
+    setView(viewByKind[activity.kind]);
+  }
+
   return (
     <div className="app-shell">
       <header className="site-header">
@@ -46,7 +72,7 @@ export default function App() {
             <small>Lernplattform</small>
           </span>
         </button>
-        <div className="status-pill">Aufbauphase · v0.3</div>
+        <div className="status-pill">Aufbauphase · v0.4</div>
       </header>
 
       {view === "home" && (
@@ -92,10 +118,10 @@ export default function App() {
 
             <div className="coming-grid">
               <div className="coming-card">
-                Neue Einheiten werden künftig über das zentrale Inhaltsregister automatisch hier angezeigt.
+                Neue Einheiten erscheinen künftig automatisch aus dem zentralen Inhaltsregister.
               </div>
               <div className="coming-card">
-                Nächste Ausbaustufe: weitere physikalische Simulationen · Aufgabenpools · Boss-Level
+                Externe hochwertige Simulationen und eigene Mini-Labore werden je nach Thema kombiniert.
               </div>
             </div>
           </section>
@@ -112,51 +138,38 @@ export default function App() {
             <p>{selectedUnit.description}</p>
           </section>
 
-          {selectedUnit.id === "elektrizitaet-44-49" ? (
-            <section className="activity-grid">
-              <button className="activity-card mission" onClick={() => setView("mission")}>
-                <span className="activity-icon">⌁</span>
+          <section className="activity-grid">
+            {selectedUnit.activities.map((activity) => (
+              <button
+                key={activity.id}
+                className={`activity-card ${classByKind[activity.kind]}`}
+                onClick={() => openActivity(activity)}
+              >
+                <span className="activity-icon">{iconByKind[activity.kind]}</span>
                 <div>
-                  <div className="eyebrow">Mission</div>
-                  <h2>Stromcode</h2>
-                  <p>Gemischte Aufgaben mit Hinweisen, plausiblen Fehlantworten und zufälliger Reihenfolge.</p>
-                  <strong>{completed.includes("stromcode") ? "✓ abgeschlossen" : "Mission starten →"}</strong>
+                  <div className="eyebrow">{activity.label}</div>
+                  <h2>{activity.title}</h2>
+                  <p>{activity.description}</p>
+                  <strong>
+                    {completed.includes(activity.id)
+                      ? "✓ abgeschlossen"
+                      : activity.kind === "phet-lab"
+                        ? "Labor öffnen →"
+                        : activity.kind === "virtual-lab"
+                          ? "Experiment öffnen →"
+                          : "Starten →"}
+                  </strong>
                 </div>
               </button>
+            ))}
+          </section>
+        </main>
+      )}
 
-              <button className="activity-card workshop" onClick={() => setView("workshop")}>
-                <span className="activity-icon">⎍</span>
-                <div>
-                  <div className="eyebrow">Werkstatt</div>
-                  <h2>Stromkreis bauen</h2>
-                  <p>Bauteile auswählen, einen einfachen Stromkreis zusammensetzen und Bereiche im Schaltbild finden.</p>
-                  <strong>Werkstatt öffnen →</strong>
-                </div>
-              </button>
-
-              <button className="activity-card challenge" onClick={() => setView("challenge")}>
-                <span className="activity-icon">↯</span>
-                <div>
-                  <div className="eyebrow">Challenge-Mix</div>
-                  <h2>Ordnen · Sortieren · Fehler finden</h2>
-                  <p>Drei wiederverwendbare Spieltypen: Drag & Drop, Sortieraufgabe und Fehlerdetektiv.</p>
-                  <strong>Challenges öffnen →</strong>
-                </div>
-              </button>
-
-              <button className="activity-card lab" onClick={() => setView("lab")}>
-                <span className="activity-icon">◉</span>
-                <div>
-                  <div className="eyebrow">Experiment</div>
-                  <h2>Widerstands-Labor</h2>
-                  <p>Kontrollierte Messreihen durchführen, Messwerte speichern und automatisch als Diagramm darstellen.</p>
-                  <strong>Experiment öffnen →</strong>
-                </div>
-              </button>
-            </section>
-          ) : (
-            <div className="coming-card">Für diese Einheit werden die Lernaktivitäten gerade vorbereitet.</div>
-          )}
+      {view === "phet-lab" && (
+        <main>
+          <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
+          <PhetCircuitLab onComplete={() => complete("phet-stromkreis")} />
         </main>
       )}
 
@@ -173,21 +186,6 @@ export default function App() {
         </main>
       )}
 
-      {view === "workshop" && (
-        <main>
-          <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
-          <section className="toolkit-intro">
-            <div className="eyebrow">Virtuelle Werkstatt</div>
-            <h1>Stromkreis-Werkstatt</h1>
-            <p>
-              Baue zuerst den einfachen Stromkreis. Danach trainierst du dieselben Bestandteile direkt
-              am Schaltbild.
-            </p>
-          </section>
-          <CircuitWorkshop />
-        </main>
-      )}
-
       {view === "challenge" && (
         <main>
           <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
@@ -195,7 +193,7 @@ export default function App() {
             <div className="eyebrow">Interaktive Trainingsformen</div>
             <h1>Challenge-Mix</h1>
             <p>
-              Dieselben Physikinhalte werden hier mit unterschiedlichen Spielmechaniken trainiert.
+              Dieselben Physikinhalte werden mit unterschiedlichen Spielmechaniken trainiert.
               Die Komponenten können später in jedem Kapitel wiederverwendet werden.
             </p>
           </section>
@@ -211,7 +209,9 @@ export default function App() {
       )}
 
       <footer>
-        Physik 3 · Inhalte, Spielmechanik und virtuelle Experimente sind getrennt aufgebaut, damit die Plattform Kapitel für Kapitel wachsen kann.
+        Physik 3 · Fachinhalt, Lernaktivität und Darstellung sind getrennt aufgebaut. Komplexe
+        Simulationen werden nur dann selbst entwickelt, wenn dafür ein echter didaktischer Mehrwert
+        besteht.
       </footer>
     </div>
   );
