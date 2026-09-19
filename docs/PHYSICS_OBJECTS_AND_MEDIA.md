@@ -1,5 +1,7 @@
 # Qualitätsstandard: Physikobjekte, Medien und Simulationen
 
+> **Verbindlichkeit:** Der zentrale Gesamtstandard steht in `docs/QUALITAETSSTANDARD_LERNPLATTFORM.md`. Dieses Dokument konkretisiert nur Medien, Physikobjekte und Simulationen. Bei Überschneidungen gilt der zentrale Qualitätsstandard.
+
 ## Ziel
 
 Die Lernplattform soll physikalische Inhalte nicht nur sprachlich abfragen, sondern fachlich passende Medien und Interaktionen einsetzen.
