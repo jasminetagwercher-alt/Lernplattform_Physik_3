@@ -31,6 +31,16 @@ Für alle neuen und überarbeiteten Lerneinheiten gilt `docs/QUALITAETSSTANDARD_
 
 Die Dateien `docs/SKILL_SCHUELERKACHELN_VISUELLE_AUFGABEN.txt`, `docs/PHYSICS_OBJECTS_AND_MEDIA.md` und `docs/ASSET_LIBRARY.md` sind ergänzende Spezialregeln. Bei Überschneidungen ist der zentrale Qualitätsstandard maßgeblich.
 
+## Neue Einheiten
+
+Für neue Themenblöcke gilt der feste Autoren-Workflow:
+
+- `docs/EINHEITEN_VORLAGE.md` – vollständige Planungs- und Freigabevorlage
+- `docs/NEUE_EINHEIT_WORKFLOW.md` – kurze Arbeitsanweisung
+- `docs/templates/NEUE_EINHEIT.template.ts.txt` – technische Copy-Paste-Vorlage
+
+Grundprinzip: **Quelle → Lernziele → Denkhandlungen → passende Aktivität → Medien/Experiment → Kapitel-Check → Qualitätsfreigabe.**
+
 ## Fachliche Leitlinie
 
 Jede Aufgabe erhält interne Quellen-IDs aus der Wissensdatenbank. Die Schüleransicht zeigt diese Metadaten nicht. Eigene Simulationen visualisieren nur fachliche Beziehungen, die in der zugrunde liegenden Wissensquelle freigegeben sind.
