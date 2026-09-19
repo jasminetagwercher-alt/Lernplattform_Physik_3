@@ -1,15 +1,31 @@
+import type { AssessmentResult } from "./assessment/useScoredAssessment";
+import { useActivityResults } from "./assessment/useActivityResults";
 import { DiagramLabelDropGame } from "./dnd/DiagramLabelDropGame";
 import { GroupDropGame } from "./dnd/GroupDropGame";
 import { PairDropGame } from "./dnd/PairDropGame";
 import { asMediaImage, electricityAssets as a } from "../content/electricityAssets";
 
-export function MediaTraining() {
+export function MediaTraining({
+  onComplete,
+}: {
+  onComplete?: (result: AssessmentResult) => void;
+}) {
+  const activity = useActivityResults({
+    taskIds: ["pairs", "switches", "diagram"],
+    onComplete,
+  });
+
   return (
     <div className="challenge-stack">
+      <div className="activity-mini-progress">
+        {activity.completedTasks}/{activity.totalTasks} Aufgaben abgeschlossen
+      </div>
+
       <PairDropGame
         title="Bauteil und Schaltsymbol"
         prompt="Ordne jeder Darstellung des Bauteils das passende Schaltsymbol zu. Prüfe erst, wenn alle Kacheln liegen."
         hint="Achte auf die Funktion des Bauteils, nicht auf Farbe oder Form der Illustration."
+        onComplete={(result) => activity.record("pairs", result)}
         pairs={[
           {
             id: "battery",
@@ -47,6 +63,7 @@ export function MediaTraining() {
       <GroupDropGame
         title="Schalter: offen oder geschlossen?"
         prompt="Ordne reale Darstellung und Schaltsymbol dem richtigen Zustand zu."
+        onComplete={(result) => activity.record("switches", result)}
         groups={[
           { id: "open", title: "offen", subtitle: "Stromkreis unterbrochen" },
           { id: "closed", title: "geschlossen", subtitle: "Verbindung hergestellt" },
@@ -66,6 +83,7 @@ export function MediaTraining() {
         imageSrc={a.circuitDiagram.src}
         imageAlt={a.circuitDiagram.alt}
         hint="Suche zuerst das Messgerät mit A und die Lampe mit dem Kreis-und-Kreuz-Symbol."
+        onComplete={(result) => activity.record("diagram", result)}
         labels={[
           {
             id: "battery",
