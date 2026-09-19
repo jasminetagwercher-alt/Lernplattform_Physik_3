@@ -53,6 +53,25 @@ export const electricityUnit: LearningUnit = {
         "Führe kontrollierte Messreihen durch, speichere Messwerte und untersuche automatisch erzeugte Diagramme.",
       sourceRefs: ["P3-FD-038", "P3-K3-S048-M02", "P3-K3-S046-M02"],
     },
+    {
+      id: "kapitel-check-44-49",
+      kind: "chapter-check",
+      label: "Abschluss",
+      title: "Kapitel-Check",
+      description:
+        "Drei gemischte Kachelaufgaben zu Bauteilen, Grundvorstellungen und Widerstand. Ein Teil wird bei jedem Start neu ausgewählt.",
+      sourceRefs: [
+        "P3-K3-S044-M01",
+        "P3-K3-S044-M02",
+        "P3-K3-S045-M01",
+        "P3-K3-S045-M02",
+        "P3-K3-S046-M02",
+        "P3-K3-S047-M01",
+        "P3-K3-S048-M02",
+        "P3-FD-018",
+        "P3-FD-038"
+      ],
+    },
   ],
   tasks: [
     {
@@ -144,7 +163,7 @@ export const electricityUnit: LearningUnit = {
       hint: "Wenn der Widerstand größer wird, wird die Stromstärke laut Buch kleiner.",
       explanation:
         "Hoher Widerstand führt zu kleiner Stromstärke; kleiner Widerstand zu hoher Stromstärke.",
-      sourceRefs: ["P3-K3-S048-M02", "P3-KOMP-044"],
+      sourceRefs: ["P3-K3-S048-M02"],
     },
     {
       id: "p3-k3-048-02",
