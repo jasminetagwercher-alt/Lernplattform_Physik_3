@@ -339,6 +339,25 @@ Eine Änderung gilt erst als veröffentlicht, wenn mindestens:
 
 Ein fehlgeschlagener Zwischencommit ist kein freigegebener Stand.
 
+
+---
+
+## 17. Standardworkflow für neue Einheiten
+
+Jede neue Einheit wird mit `docs/EINHEITEN_VORLAGE.md` geplant.
+
+Die technische Ausgangsdatei ist:
+`docs/templates/NEUE_EINHEIT.template.ts.txt`
+
+Kurzworkflow:
+`docs/NEUE_EINHEIT_WORKFLOW.md`
+
+Verbindliche Reihenfolge:
+
+**Quelle → fachliche Grenzen → Lernziele → Denkhandlungen → Aktivitätsmix → Asset-Plan → Umsetzung → Kapitel-Check → Qualitätsprüfung → Deploy**
+
+Die vorhandene Referenzeinheit darf als Qualitätsbeispiel dienen, aber ihre Aktivitätstypen werden nicht mechanisch kopiert.
+
 ---
 
 # Freigabe-Checkliste für jede neue Aufgabe
