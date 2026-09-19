@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import type { AssessmentResult } from "../assessment/useScoredAssessment";
 import { useScoredAssessment } from "../assessment/useScoredAssessment";
-import type { MediaItem } from "../media/MediaCard";
+import { mediaItemLayoutClass, type MediaItem } from "../media/MediaCard";
 import { DraggableMediaTile } from "./DraggableMediaTile";
 import { DroppableZone } from "./DroppableZone";
 import { PointerDragProvider } from "./PointerDragProvider";
@@ -132,6 +132,7 @@ export function GroupDropGame({
                     <div
                       className={[
                         "placed-draggable",
+                        mediaItemLayoutClass(tile.media),
                         assessment.locked.includes(tile.id) ? "correct" : "",
                         assessment.wrong.includes(tile.id) ? "wrong" : "",
                       ].join(" ")}
