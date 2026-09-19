@@ -1,14 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
   <rect width="900" height="520" rx="30" fill="#0b1628"/>
   <g fill="none" stroke="#8498b3" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M145 110H365M535 110H755V210M755 310V410H525M375 410H145V315M145 205V110"/>
-    <path d="M365 110h0M535 110h0"/>
+    <path d="M145 110H365M535 110H755V210M755 310V410H525M375 410H145V290M145 230V110"/>
   </g>
   <g fill="none" stroke="#eef5fb" stroke-width="9" stroke-linecap="round">
-    <circle cx="450" cy="110" r="55"/><path d="M414 74l72 72M486 74l-72 72"/>
-    <circle cx="755" cy="260" r="50"/><path d="M755 228v64"/>
-    <path d="M145 205h0"/><path d="M145 315h0"/><path d="M122 215v90"/><path d="M162 232v56"/>
-    <circle cx="375" cy="410" r="9" fill="#eef5fb"/><circle cx="525" cy="410" r="9" fill="#eef5fb"/><path d="M375 401l105-63"/>
+    <circle cx="450" cy="110" r="55"/>
+    <path d="M414 74l72 72M486 74l-72 72"/>
+
+    <circle cx="755" cy="260" r="50"/>
+    <path d="M755 228v64"/>
+
+    <path d="M105 230h80"/>
+    <path d="M125 290h40"/>
+
+    <circle cx="375" cy="410" r="9" fill="#eef5fb"/>
+    <circle cx="525" cy="410" r="9" fill="#eef5fb"/>
+    <path d="M375 401l105-63"/>
   </g>
   <text x="755" y="278" text-anchor="middle" fill="#eef5fb" font-size="58" font-family="Arial" font-weight="700">A</text>
   <circle cx="450" cy="110" r="76" fill="none" stroke="#ffd36b" stroke-width="5" opacity=".13"/>
