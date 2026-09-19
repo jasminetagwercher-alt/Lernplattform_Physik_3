@@ -1,0 +1,132 @@
+// PHYSIK 3 – TECHNISCHE VORLAGE FÜR EINE NEUE EINHEIT
+//
+// Verwendung:
+// 1. Datei kopieren nach src/content/<thema>.ts
+// 2. Platzhalter ersetzen.
+// 3. Nur fachlich belegte sourceRefs eintragen.
+// 4. Einheit anschließend in src/content/registry.ts registrieren.
+//
+// Diese Datei ist absichtlich .txt und wird nicht mitkompiliert.
+
+import type { LearningUnit } from "../model";
+
+export const newUnit: LearningUnit = {
+  id: "kapitel-thema-seiten",
+  chapter: "Kapitel X · Thema",
+  title: "Schülergerechter Einheitentitel",
+  pages: "S. XX–YY",
+  description:
+    "Kurze Beschreibung dessen, was Schüler:innen in dieser Einheit tun.",
+
+  activities: [
+    // Nur sinnvolle Aktivitäten verwenden. Nicht alle Typen sind Pflicht.
+
+    {
+      id: "thema-grundlagen",
+      kind: "mission",
+      label: "Übung",
+      title: "Grundlagen-Check",
+      description: "Kurze gemischte Aufgaben zu den Grundlagen.",
+      sourceRefs: [
+        "SOURCE-ID",
+      ],
+    },
+
+    {
+      id: "thema-visuell",
+      kind: "media-training",
+      label: "Interaktiv",
+      title: "Karten & Zuordnen",
+      description: "Visuelle Zuordnung mit fachlich geprüften Medien.",
+      sourceRefs: [
+        "SOURCE-ID",
+      ],
+    },
+
+    {
+      id: "thema-denken",
+      kind: "challenge",
+      label: "Kurztraining",
+      title: "Denken & Prüfen",
+      description: "Konzeptfragen, Kontraste oder typische Fehlvorstellungen.",
+      sourceRefs: [
+        "SOURCE-ID",
+      ],
+    },
+
+    // Nur wenn ein Experiment fachlich sinnvoll ist.
+    {
+      id: "thema-labor",
+      kind: "virtual-lab",
+      label: "Experiment",
+      title: "Themen-Labor",
+      description:
+        "Vermutung, Veränderung/Messung, Messreihe, Auswertung und Schlussfolgerung.",
+      sourceRefs: [
+        "SOURCE-ID",
+      ],
+    },
+
+    {
+      id: "thema-kapitel-check",
+      kind: "chapter-check",
+      label: "Abschluss",
+      title: "Kapitel-Check",
+      description:
+        "Gemischte Abschlussaufgaben aus mehreren Denkformen und einem Aufgabenpool.",
+      sourceRefs: [
+        "SOURCE-ID",
+      ],
+    },
+  ],
+
+  tasks: [
+    {
+      id: "unit-source-01",
+      type: "single-choice",
+      title: "Kurztitel",
+      prompt: "Fachlich klar formulierte Frage",
+      options: [
+        { id: "a", label: "Antwort A" },
+        { id: "b", label: "Antwort B" },
+        { id: "c", label: "Antwort C" },
+      ],
+      correctId: "a",
+      hint: "Hinweis, der Denken unterstützt, aber die Lösung nicht nennt.",
+      explanation: "Kurze fachliche Erklärung nach der Lösung.",
+      sourceRefs: ["SOURCE-ID"],
+    },
+
+    // Beispiel Mehrfachauswahl
+    {
+      id: "unit-source-02",
+      type: "multi-choice",
+      title: "Kurztitel",
+      prompt: "Welche Aussagen / Elemente passen?",
+      options: [
+        { id: "a", label: "..." },
+        { id: "b", label: "..." },
+        { id: "c", label: "..." },
+      ],
+      correctIds: ["a", "b"],
+      hint: "...",
+      explanation: "...",
+      sourceRefs: ["SOURCE-ID"],
+    },
+
+    // Beispiel Zahlenaufgabe – nur wenn durch Quellen gedeckt.
+    {
+      id: "unit-source-03",
+      type: "numeric",
+      title: "Kurztitel",
+      prompt: "Berechne ...",
+      formula: "FORMEL",
+      answer: 0,
+      unit: "EINHEIT",
+      tolerance: 0,
+      hint: "...",
+      explanation: "...",
+      sourceRefs: ["SOURCE-ID"],
+    },
+  ],
+};
