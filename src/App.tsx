@@ -252,7 +252,7 @@ export default function App() {
       {view === "phet-lab" && (
         <main>
           <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
-          <PhetCircuitLab onComplete={() => recordProgress("phet-stromkreis")} />
+          <PhetCircuitLab onComplete={(result) => recordProgress("phet-stromkreis", result)} />
         </main>
       )}
 
