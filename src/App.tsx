@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { AssessmentResult } from "./components/assessment/useScoredAssessment";
 import { ChallengeMix } from "./components/ChallengeMix";
+import { ChapterCheck } from "./components/ChapterCheck";
 import { MediaTraining } from "./components/MediaTraining";
 import { MissionEngine } from "./components/MissionEngine";
 import { PhetCircuitLab } from "./components/PhetCircuitLab";
@@ -8,7 +9,7 @@ import { ResistanceLab } from "./components/ResistanceLab";
 import { learningUnits } from "./content/registry";
 import type { ActivityKind, LearningActivity } from "./model";
 
-type View = "home" | "unit" | "mission" | "challenge" | "media" | "phet-lab" | "lab";
+type View = "home" | "unit" | "mission" | "challenge" | "media" | "phet-lab" | "lab" | "chapter-check";
 
 type ProgressEntry = {
   completed: boolean;
@@ -29,6 +30,7 @@ const viewByKind: Record<ActivityKind, View> = {
   "media-training": "media",
   "phet-lab": "phet-lab",
   "virtual-lab": "lab",
+  "chapter-check": "chapter-check",
 };
 
 const iconByKind: Record<ActivityKind, string> = {
@@ -37,6 +39,7 @@ const iconByKind: Record<ActivityKind, string> = {
   "media-training": "▦",
   "phet-lab": "⚡",
   "virtual-lab": "◉",
+  "chapter-check": "✓",
 };
 
 const classByKind: Record<ActivityKind, string> = {
@@ -45,6 +48,7 @@ const classByKind: Record<ActivityKind, string> = {
   "media-training": "media",
   "phet-lab": "phet",
   "virtual-lab": "lab",
+  "chapter-check": "chapter",
 };
 
 function loadProgress(): ProgressMap {
@@ -293,6 +297,18 @@ export default function App() {
         <main>
           <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
           <ResistanceLab onComplete={(result) => recordProgress("widerstands-labor", result)} />
+        </main>
+      )}
+
+      {view === "chapter-check" && (
+        <main>
+          <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
+          <section className="toolkit-intro">
+            <div className="eyebrow">Abschluss</div>
+            <h1>Kapitel-Check</h1>
+            <p>Zeige, was du aus diesem Abschnitt wirklich verstanden hast.</p>
+          </section>
+          <ChapterCheck onComplete={(result) => recordProgress("kapitel-check-44-49", result)} />
         </main>
       )}
     </div>
