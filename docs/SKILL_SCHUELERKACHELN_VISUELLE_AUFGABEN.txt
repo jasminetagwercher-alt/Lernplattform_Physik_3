@@ -5,7 +5,7 @@ docs/QUALITAETSSTANDARD_LERNPLATTFORM.md
 Diese Datei konkretisiert nur den Spezialbereich Schülerkacheln und visuelle Aufgaben. Bei Überschneidungen gilt der zentrale Qualitätsstandard.
 
 PHYSIK 3 – SKILL: SCHÜLERKACHELN & VISUELLE AUFGABEN
-Version 1.1
+Version 1.2
 
 ZIEL
 Interaktive Aufgaben müssen echtes Denken verlangen. Die Darstellung darf die Lösung nicht versehentlich verraten und darf keine internen Projektinformationen enthalten.
@@ -72,3 +72,22 @@ Vor jeder neuen visuellen Aufgabe prüfen:
 - Sind alle Anschlüsse, Pole und Leitungen geometrisch korrekt verbunden?
 
 Wenn eine dieser Fragen mit JA beantwortet wird: Aufgabe vor Veröffentlichung überarbeiten.
+
+
+8. TEXT MUSS IN DIE KACHEL PASSEN
+- Text darf niemals über den Rand einer Kachel hinausragen oder außerhalb der Kachel erscheinen.
+- Kachelgröße richtet sich nach dem Inhalt, nicht umgekehrt.
+- Bild- und Symbolkacheln bleiben kompakt.
+- Kurze Begriffe dürfen kompakt dargestellt werden.
+- Längere Begriffe erhalten mehr Breite bzw. kleinere, weiterhin gut lesbare Schrift.
+- Ganze Aussagen werden als breite Aussagekarten dargestellt und dürfen nicht in schmale Symbolkacheln gezwängt werden.
+- Text muss sauber umbrechen; lange Wörter müssen innerhalb der Kachel umbrechbar sein.
+- Keine feste Höhe verwenden, die sichtbaren Text abschneidet.
+- In Zielbereichen dürfen Textkacheln nicht pauschal auf eine sehr schmale Standardbreite reduziert werden.
+- Drag-Vorschau muss bei langen Textkarten ebenfalls groß genug sein, damit der Inhalt lesbar bleibt.
+
+9. TEXTMENGE UND HINWEISE
+- Captions nur verwenden, wenn sie didaktisch notwendig sind.
+- Captions entfernen, wenn sie die Lösung erleichtern oder nur redundante Information liefern.
+- Beispiel: Bei der Kachel "Amperemeter" ist die zusätzliche Caption "Messgerät" in einer Aufgabe zu Einflussgrößen des Widerstands ein unnötiger Lösungshinweis.
+- Vor Veröffentlichung jede Textkachel auf Desktop und schmalem Bildschirm auf Umbruch und Lesbarkeit prüfen.
