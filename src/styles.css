@@ -2191,3 +2191,104 @@ footer { color: #718199; font-size: .82rem; border-top: 1px solid var(--line); p
     padding: 4px;
   }
 }
+
+
+/* Unit progress and chapter check */
+.unit-progress-card {
+  margin-top: 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(10, 25, 43, .72);
+}
+
+.unit-progress-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+}
+
+.unit-progress-top strong,
+.unit-progress-top span {
+  display: block;
+}
+
+.unit-progress-top strong {
+  font-size: 1.35rem;
+}
+
+.unit-progress-top span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.unit-progress-percent {
+  font-size: 1.45rem;
+  font-weight: 950;
+  color: var(--cyan);
+}
+
+.unit-progress-track {
+  height: 10px;
+  margin-top: 13px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,.07);
+}
+
+.unit-progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  transition: width .25s ease;
+}
+
+.unit-score-summary {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.unit-score-summary strong {
+  color: #eaf4fc;
+}
+
+.activity-mini-progress {
+  position: sticky;
+  top: 10px;
+  z-index: 8;
+  width: fit-content;
+  margin-left: auto;
+  border: 1px solid rgba(91,227,255,.22);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(7,17,31,.92);
+  color: #c8d6e5;
+  font-size: .8rem;
+  font-weight: 850;
+  backdrop-filter: blur(8px);
+}
+
+.activity-card.chapter {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(98,231,172,.14), transparent 34%),
+    linear-gradient(145deg, #132d31, #16223a);
+}
+
+.chapter-check .game-card:first-of-type {
+  border-color: rgba(98,231,172,.18);
+}
+
+@media (max-width: 620px) {
+  .unit-progress-top {
+    align-items: flex-start;
+  }
+
+  .activity-mini-progress {
+    position: static;
+    margin: 0 0 12px auto;
+  }
+}
