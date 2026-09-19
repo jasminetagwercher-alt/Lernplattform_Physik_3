@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import type { AssessmentResult } from "./assessment/useScoredAssessment";
 import { MeasurementChart } from "./MeasurementChart";
 import { DigitalMeter } from "./lab/DigitalMeter";
 import { LabSlider } from "./lab/LabSlider";
@@ -15,7 +16,7 @@ type Measurement = {
 type Mode = "vary-resistance" | "vary-voltage";
 type Prediction = "larger" | "smaller" | "same";
 
-export function ResistanceLab() {
+export function ResistanceLab({ onComplete }: { onComplete?: (result: AssessmentResult) => void }) {
   const [mode, setMode] = useState<Mode>("vary-resistance");
   const [voltage, setVoltage] = useState(12);
   const [resistance, setResistance] = useState(4);
@@ -27,6 +28,7 @@ export function ResistanceLab() {
   const [conclusionSolved, setConclusionSolved] = useState(false);
   const [solutionShown, setSolutionShown] = useState(false);
   const [measurementMessage, setMeasurementMessage] = useState("");
+  const reported = useRef(false);
 
   const current = useMemo(() => voltage / resistance, [voltage, resistance]);
   const electronCount = Math.max(2, Math.min(18, Math.round(current * 2)));
@@ -99,6 +101,15 @@ export function ResistanceLab() {
 
     if (conclusion === correctConclusion) {
       setConclusionSolved(true);
+      if (!reported.current) {
+        reported.current = true;
+        onComplete?.({
+          score: conclusionPoints,
+          maxScore: 3,
+          attempts: conclusionAttempts + 1,
+          usedSolution: false,
+        });
+      }
       return;
     }
 
@@ -110,6 +121,15 @@ export function ResistanceLab() {
     setConclusionPoints(0);
     setConclusionSolved(true);
     setSolutionShown(true);
+    if (!reported.current) {
+      reported.current = true;
+      onComplete?.({
+        score: 0,
+        maxScore: 3,
+        attempts: conclusionAttempts,
+        usedSolution: true,
+      });
+    }
   }
 
   const chartPoints = [...measurements]
