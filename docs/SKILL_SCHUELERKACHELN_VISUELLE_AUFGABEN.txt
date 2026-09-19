@@ -1,5 +1,5 @@
 PHYSIK 3 – SKILL: SCHÜLERKACHELN & VISUELLE AUFGABEN
-Version 1.0
+Version 1.1
 
 ZIEL
 Interaktive Aufgaben müssen echtes Denken verlangen. Die Darstellung darf die Lösung nicht versehentlich verraten und darf keine internen Projektinformationen enthalten.
@@ -53,6 +53,8 @@ Textkarten bleiben sinnvoll für Aussagen, Begriffe, Hypothesen und Schlussfolge
 - Symbole müssen dem im Unterricht üblichen Standard entsprechen.
 - Keine ungewöhnlichen Varianten verwenden, wenn es eine etablierte schulische Standarddarstellung gibt.
 - Beispiel: Für eine einfache Spannungsquelle im Unterricht standardmäßig das Symbol EINER ZELLE (eine lange + eine kurze Linie) verwenden, sofern nicht ausdrücklich eine Batterie aus mehreren Zellen gemeint ist.
+- Bauteile und Symbole müssen im Schaltbild geometrisch korrekt angeschlossen sein. Leitungen müssen die vorgesehenen Anschlüsse/Pole tatsächlich berühren.
+- Bei gedrehten Bauteilen muss auch das Symbol passend zur Leitungsrichtung gedreht werden. Keine optisch schwebenden oder nur ungefähr verbundenen Schaltelemente.
 
 7. SCHÜLERPERSPEKTIVE VOR VERÖFFENTLICHUNG
 Vor jeder neuen visuellen Aufgabe prüfen:
@@ -61,5 +63,6 @@ Vor jeder neuen visuellen Aufgabe prüfen:
 - Wird ein darstellbares Objekt unnötig nur als Wort gezeigt?
 - Verrät das Interface schon beim Ausprobieren die richtige Lösung?
 - Ist das verwendete Symbol die im Unterricht übliche Variante?
+- Sind alle Anschlüsse, Pole und Leitungen geometrisch korrekt verbunden?
 
 Wenn eine dieser Fragen mit JA beantwortet wird: Aufgabe vor Veröffentlichung überarbeiten.
