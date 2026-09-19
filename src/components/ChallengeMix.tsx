@@ -1,11 +1,27 @@
+import type { AssessmentResult } from "./assessment/useScoredAssessment";
+import { useActivityResults } from "./assessment/useActivityResults";
 import { GroupDropGame } from "./dnd/GroupDropGame";
 
-export function ChallengeMix() {
+export function ChallengeMix({
+  onComplete,
+}: {
+  onComplete?: (result: AssessmentResult) => void;
+}) {
+  const activity = useActivityResults({
+    taskIds: ["statements", "resistance-order", "resistance-factors"],
+    onComplete,
+  });
+
   return (
     <div className="challenge-stack">
+      <div className="activity-mini-progress">
+        {activity.completedTasks}/{activity.totalTasks} Aufgaben abgeschlossen
+      </div>
+
       <GroupDropGame
         title="Stimmt oder stimmt nicht?"
         prompt="Ziehe jede Aussage in das passende Feld. Prüfe erst, wenn alle Kacheln liegen."
+        onComplete={(result) => activity.record("statements", result)}
         groups={[
           { id: "true", title: "Stimmt" },
           { id: "false", title: "Stimmt nicht" },
@@ -54,6 +70,7 @@ export function ChallengeMix() {
       <GroupDropGame
         title="Welche Stromstärke ist größer?"
         prompt="Die Spannung ist bei allen drei Fällen gleich. Ordne die Widerstandskacheln nach der Größe der Stromstärke."
+        onComplete={(result) => activity.record("resistance-order", result)}
         groups={[
           { id: "largest", title: "größte Stromstärke" },
           { id: "middle", title: "mittlere Stromstärke" },
@@ -82,6 +99,7 @@ export function ChallengeMix() {
       <GroupDropGame
         title="Was beeinflusst den Widerstand?"
         prompt="Ordne alle Kacheln. Welche Größen werden auf den Buchseiten als Einfluss auf den Widerstand genannt?"
+        onComplete={(result) => activity.record("resistance-factors", result)}
         groups={[
           { id: "influence", title: "beeinflusst den Widerstand" },
           { id: "not", title: "keine genannte Einflussgröße" },
