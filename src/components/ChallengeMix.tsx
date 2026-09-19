@@ -80,17 +80,17 @@ export function ChallengeMix({
           {
             id: "r2",
             groupId: "largest",
-            media: { id: "r2-card", kind: "symbol", symbol: "2 Ω", caption: "Widerstand" },
+            media: { id: "r2-card", kind: "symbol", symbol: "2 Ω" },
           },
           {
             id: "r4",
             groupId: "middle",
-            media: { id: "r4-card", kind: "symbol", symbol: "4 Ω", caption: "Widerstand" },
+            media: { id: "r4-card", kind: "symbol", symbol: "4 Ω" },
           },
           {
             id: "r8",
             groupId: "smallest",
-            media: { id: "r8-card", kind: "symbol", symbol: "8 Ω", caption: "Widerstand" },
+            media: { id: "r8-card", kind: "symbol", symbol: "8 Ω" },
           },
         ]}
         hint="Bei gleicher Spannung gilt: Je größer der Widerstand, desto kleiner die Stromstärke."
@@ -128,12 +128,12 @@ export function ChallengeMix({
           {
             id: "ampere",
             groupId: "not",
-            media: { id: "ampere-card", kind: "symbol", symbol: "A", caption: "Ampere" },
+            media: { id: "ampere-card", kind: "symbol", symbol: "A" },
           },
           {
             id: "ammeter",
             groupId: "not",
-            media: { id: "ammeter-card", kind: "text", text: "Amperemeter", caption: "Messgerät" },
+            media: { id: "ammeter-card", kind: "text", text: "Amperemeter" },
           },
         ]}
         hint="Gesucht sind Eigenschaften des Leiters. Einheit und Messgerät gehören nicht dazu."
