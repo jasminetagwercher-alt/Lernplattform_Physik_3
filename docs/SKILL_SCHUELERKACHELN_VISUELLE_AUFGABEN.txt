@@ -1,0 +1,65 @@
+PHYSIK 3 – SKILL: SCHÜLERKACHELN & VISUELLE AUFGABEN
+Version 1.0
+
+ZIEL
+Interaktive Aufgaben müssen echtes Denken verlangen. Die Darstellung darf die Lösung nicht versehentlich verraten und darf keine internen Projektinformationen enthalten.
+
+GRUNDREGEL
+Auf Schülerkacheln erscheint nur das, was für die Aufgabe selbst notwendig ist.
+
+1. KEINE LÖSUNGSVERRÄTER
+- Keine Beschriftung, die die richtige Zuordnung direkt nennt.
+- Beispiel: Bei einer Bildkachel für einen offenen Schalter darf NICHT "Schalter offen" stehen.
+- Bei einem Schaltsymbol darf NICHT "Schaltsymbol Schalter offen" stehen.
+- Wenn die Aufgabe Bild <-> Begriff oder Bild <-> Symbol prüft, muss das Bild ohne verräterische Beschriftung auskommen.
+
+2. KEINE INTERNEN METADATEN IN DER SCHÜLERANSICHT
+Nicht sichtbar auf Kacheln:
+- "Eigene Illustration"
+- "Physik 3"
+- Quellenangaben
+- Lizenzangaben
+- Asset-ID
+- Wissensdatenbank-ID
+- Dateiname
+- Entwicklerhinweise
+Diese Informationen bleiben ausschließlich intern in der Asset-Registry, Dokumentation oder Lehrer-/Adminansicht.
+
+3. BILDKACHELN
+- Standard: nur das Bild.
+- Text nur dann, wenn Text selbst Teil der Lernaufgabe ist.
+- Caption nur, wenn sie didaktisch ausdrücklich benötigt wird und die Lösung nicht verrät.
+- Alt-Text bleibt für Barrierefreiheit vorhanden, wird aber nicht als sichtbare Lösungshilfe eingeblendet.
+
+4. AUFGABEN MÜSSEN DENKARBEIT VERLANGEN
+- Falsche Ablagen dürfen möglich sein.
+- Keine automatische Sperre, die schon beim Ablegen verrät, was richtig ist.
+- Erst nach bewusster Bearbeitung prüfen.
+- Fehlversuche dürfen Punkte kosten.
+- Richtige Lösungen werden erst nach Prüfung bestätigt.
+
+5. VISUELLE PHYSIK STATT WORT-ERSATZ
+Wenn ein physikalisches Objekt sinnvoll gezeigt werden kann, soll nicht bloß sein Name als Kachel verwendet werden.
+Bevorzugt:
+- reale/stilisierte Bauteile
+- korrekte Schaltsymbole
+- Messgeräte
+- Diagramme
+- Versuchsanordnungen
+- Messwerte oder Graphen
+Textkarten bleiben sinnvoll für Aussagen, Begriffe, Hypothesen und Schlussfolgerungen.
+
+6. FACHLICHE KORREKTHEIT
+- Symbole müssen dem im Unterricht üblichen Standard entsprechen.
+- Keine ungewöhnlichen Varianten verwenden, wenn es eine etablierte schulische Standarddarstellung gibt.
+- Beispiel: Für eine einfache Spannungsquelle im Unterricht standardmäßig das Symbol EINER ZELLE (eine lange + eine kurze Linie) verwenden, sofern nicht ausdrücklich eine Batterie aus mehreren Zellen gemeint ist.
+
+7. SCHÜLERPERSPEKTIVE VOR VERÖFFENTLICHUNG
+Vor jeder neuen visuellen Aufgabe prüfen:
+- Kann ich die Lösung aus einer Beschriftung erraten, ohne Physik zu verstehen?
+- Stehen interne Metadaten auf einer Schülerkachel?
+- Wird ein darstellbares Objekt unnötig nur als Wort gezeigt?
+- Verrät das Interface schon beim Ausprobieren die richtige Lösung?
+- Ist das verwendete Symbol die im Unterricht übliche Variante?
+
+Wenn eine dieser Fragen mit JA beantwortet wird: Aufgabe vor Veröffentlichung überarbeiten.
