@@ -1,5 +1,5 @@
 import type { PointerEvent } from "react";
-import { MediaCard, type MediaItem } from "../media/MediaCard";
+import { MediaCard, mediaItemLayoutClass, type MediaItem } from "../media/MediaCard";
 import { usePointerDrag } from "./PointerDragProvider";
 
 export function DraggableMediaTile({
@@ -25,7 +25,7 @@ export function DraggableMediaTile({
 
   return (
     <div
-      className={`dnd-tile-shell ${dragging ? "dragging" : ""} ${disabled ? "locked" : ""}`}
+      className={`dnd-tile-shell ${mediaItemLayoutClass(item)} ${dragging ? "dragging" : ""} ${disabled ? "locked" : ""}`}
       onPointerDown={handlePointerDown}
       onClick={disabled || !onClick ? undefined : (event) => { event.stopPropagation(); onClick(); }}
     >
