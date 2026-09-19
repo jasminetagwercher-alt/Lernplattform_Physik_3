@@ -261,8 +261,8 @@ export default function App() {
           <button className="back-button" onClick={() => setView("unit")}>← Zur Einheit</button>
           <MissionEngine
             tasks={selectedUnit.tasks}
-            onComplete={() => {
-              recordProgress("stromcode");
+            onComplete={(result) => {
+              recordProgress("stromcode", result);
               setView("unit");
             }}
           />
