@@ -89,11 +89,11 @@ export const electricityAssets: Record<string, PhysicsAsset> = {
   },
   batterySymbol: {
     id: "el-symbol-battery-01",
-    title: "Schaltsymbol Batterie",
+    title: "Schaltsymbol Spannungsquelle (Zelle)",
     category: "symbol",
     topic: "electricity",
     src: base + "symbols/battery.svg",
-    alt: "Schaltsymbol einer Batterie mit langen und kurzen parallelen Linien",
+    alt: "Schaltsymbol einer einzelnen Zelle mit einer langen und einer kurzen parallelen Linie",
     credit: "Eigene Vektorgrafik · Physik 3",
     license: "Projektintern erstellt",
     standardNote: "IEC-orientierte europäische Unterrichtsdarstellung; eigenständig gezeichnet.",
@@ -185,7 +185,5 @@ export function asMediaImage(asset: PhysicsAsset) {
     kind: "image" as const,
     src: asset.src,
     alt: asset.alt,
-    caption: asset.title,
-    credit: asset.credit,
   };
 }
