@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { MediaCard, type MediaItem } from "../media/MediaCard";
+import { MediaCard, mediaItemLayoutClass, type MediaItem } from "../media/MediaCard";
 
 type ActiveDrag = {
   id: string;
@@ -122,7 +122,7 @@ export function PointerDragProvider({
       {active &&
         createPortal(
           <div
-            className="pointer-drag-overlay"
+            className={"pointer-drag-overlay " + mediaItemLayoutClass(active.item)}
             style={{ left: active.x, top: active.y }}
             aria-hidden="true"
           >
