@@ -1,6 +1,6 @@
 # Physik 3 – Verbindlicher Qualitätsstandard für interaktive Lerneinheiten
 
-Version 1.0
+Version 1.1
 
 ## Zweck
 
@@ -186,6 +186,15 @@ Die Interaktion muss ohne lange Bedienungsanleitung verständlich sein.
 
 Große Touch-Ziele und ein klarer visueller Zustand beim Ziehen/Ablegen sind Pflicht.
 
+### Kachelgrößen und Text
+- Die Kachel passt sich dem Inhalt an, nicht der Text einer starren Kachel.
+- Lange Aussagen werden als breite Aussagekarten dargestellt.
+- Text darf niemals sichtbar aus der Kachel hinausragen.
+- Lange Wörter müssen innerhalb der Kachel umbrechen können.
+- Bild- und Symbolkacheln bleiben kompakter als Textaussagen.
+- Zielbereiche dürfen lange Textkarten nicht auf eine für Symbole gedachte Standardbreite zusammendrücken.
+- Redundante oder lösungsverratende Captions werden entfernt.
+
 ---
 
 ## 9. Experimente folgen einem Erkenntnisprozess
@@ -355,6 +364,9 @@ Vor Veröffentlichung mit JA beantworten:
 - [ ] Sind keine internen Metadaten sichtbar?
 - [ ] Ist das Medium fachlich sauber und gut lesbar?
 - [ ] Sind Touch-Ziele groß genug?
+- [ ] Bleibt jeder Text vollständig innerhalb seiner Kachel?
+- [ ] Ist die Kachelbreite der Textmenge angemessen?
+- [ ] Sind unnötige oder lösungsverratende Captions entfernt?
 
 ### Experiment
 - [ ] Gibt es eine klare Forschungsfrage?
