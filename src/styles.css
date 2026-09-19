@@ -2340,3 +2340,114 @@ footer { color: #718199; font-size: .82rem; border-top: 1px solid var(--line); p
 .phet-lab .assessment-bar {
   margin-top: 18px;
 }
+
+
+/* Adaptive tile sizing: text must always stay inside the tile */
+.media-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.media-card-visual {
+  width: 100%;
+  min-width: 0;
+}
+
+.media-text {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+
+.media-card.media-text-short {
+  min-height: 118px;
+}
+
+.media-card.media-text-short .media-text {
+  font-size: clamp(.94rem, 1.8vw, 1.18rem);
+  line-height: 1.3;
+}
+
+.media-card.media-text-medium {
+  min-height: 132px;
+}
+
+.media-card.media-text-medium .media-text {
+  font-size: clamp(.9rem, 1.55vw, 1.08rem);
+  line-height: 1.38;
+}
+
+.media-card.media-text-long {
+  min-height: 150px;
+  text-align: left;
+  align-content: center;
+  padding: 16px 18px;
+}
+
+.media-card.media-text-long .media-card-visual {
+  min-height: 0;
+  place-items: center stretch;
+}
+
+.media-card.media-text-long .media-text {
+  font-size: clamp(.88rem, 1.35vw, 1rem);
+  line-height: 1.45;
+  font-weight: 720;
+}
+
+.dnd-bank > .dnd-tile-shell.media-text-long {
+  grid-column: span 2;
+}
+
+.group-drop-contents .placed-draggable {
+  min-width: 0;
+}
+
+.group-drop-contents .placed-draggable.media-image-item,
+.group-drop-contents .placed-draggable.media-symbol-item {
+  width: min(150px, 100%);
+}
+
+.group-drop-contents .placed-draggable.media-text-short {
+  width: min(190px, 100%);
+}
+
+.group-drop-contents .placed-draggable.media-text-medium {
+  width: min(250px, 100%);
+}
+
+.group-drop-contents .placed-draggable.media-text-long {
+  width: 100%;
+  max-width: 100%;
+}
+
+.group-drop-contents .placed-draggable.media-text-long .media-card {
+  min-height: auto;
+}
+
+.pointer-drag-overlay.media-text-short {
+  width: min(190px, 55vw);
+}
+
+.pointer-drag-overlay.media-text-medium {
+  width: min(260px, 64vw);
+}
+
+.pointer-drag-overlay.media-text-long {
+  width: min(380px, 78vw);
+}
+
+@media (max-width: 720px) {
+  .dnd-bank > .dnd-tile-shell.media-text-long {
+    grid-column: 1 / -1;
+  }
+
+  .media-card.media-text-long {
+    min-height: 132px;
+  }
+}
