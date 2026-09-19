@@ -1,3 +1,9 @@
+HINWEIS ZUR VERBINDLICHKEIT
+Der zentrale Gesamtstandard für die Lernplattform steht in:
+docs/QUALITAETSSTANDARD_LERNPLATTFORM.md
+
+Diese Datei konkretisiert nur den Spezialbereich Schülerkacheln und visuelle Aufgaben. Bei Überschneidungen gilt der zentrale Qualitätsstandard.
+
 PHYSIK 3 – SKILL: SCHÜLERKACHELN & VISUELLE AUFGABEN
 Version 1.1
 
