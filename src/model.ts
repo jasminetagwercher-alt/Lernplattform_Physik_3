@@ -34,7 +34,7 @@ export type NumericTask = BaseTask & {
 
 export type Task = SingleChoiceTask | MultiChoiceTask | NumericTask;
 
-export type ActivityKind = "mission" | "challenge" | "media-training" | "phet-lab" | "virtual-lab";
+export type ActivityKind = "mission" | "challenge" | "media-training" | "phet-lab" | "virtual-lab" | "chapter-check";
 
 export type LearningActivity = {
   id: string;
