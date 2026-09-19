@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
+import type { AssessmentResult } from "./assessment/useScoredAssessment";
 import type { Task } from "../model";
 
 type Props = {
   tasks: Task[];
-  onComplete: () => void;
+  onComplete: (result: AssessmentResult) => void;
 };
 
 const shuffle = <T,>(items: T[]) =>
@@ -17,9 +18,13 @@ export function MissionEngine({ tasks, onComplete }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [numberValue, setNumberValue] = useState("");
   const [attempt, setAttempt] = useState(0);
+  const [totalAttempts, setTotalAttempts] = useState(0);
+  const [score, setScore] = useState(0);
+  const [usedSolution, setUsedSolution] = useState(false);
   const [feedback, setFeedback] = useState<"idle" | "hint" | "correct" | "solution">("idle");
 
   const task = tasks[index];
+  const maxScore = tasks.length * 3;
   const options = useMemo(
     () => ("options" in task ? shuffle(task.options) : []),
     [task.id],
@@ -40,18 +45,31 @@ export function MissionEngine({ tasks, onComplete }: Props) {
   function check() {
     const nextAttempt = attempt + 1;
     setAttempt(nextAttempt);
+    setTotalAttempts((value) => value + 1);
 
     if (isCorrect()) {
+      const points = nextAttempt === 1 ? 3 : 2;
+      setScore((value) => value + points);
       setFeedback("correct");
       return;
     }
 
-    setFeedback(nextAttempt === 1 ? "hint" : "solution");
+    if (nextAttempt === 1) {
+      setFeedback("hint");
+    } else {
+      setFeedback("solution");
+      setUsedSolution(true);
+    }
   }
 
   function next() {
     if (index === tasks.length - 1) {
-      onComplete();
+      onComplete({
+        score,
+        maxScore,
+        attempts: totalAttempts,
+        usedSolution,
+      });
       return;
     }
     setIndex((value) => value + 1);
@@ -76,13 +94,19 @@ export function MissionEngine({ tasks, onComplete }: Props) {
 
   return (
     <section className="mission-card">
-      <div className="mission-progress">
-        <span>Datensatz {index + 1} / {tasks.length}</span>
-        <div className="progress-track">
-          <div
-            className="progress-bar"
-            style={{ width: `${((index + (done ? 1 : 0)) / tasks.length) * 100}%` }}
-          />
+      <div className="task-topline">
+        <div className="mission-progress">
+          <span>Aufgabe {index + 1} / {tasks.length}</span>
+          <div className="progress-track">
+            <div
+              className="progress-bar"
+              style={{ width: String(((index + (done ? 1 : 0)) / tasks.length) * 100) + "%" }}
+            />
+          </div>
+        </div>
+        <div className="score-box">
+          <strong>{score}/{maxScore}</strong>
+          <span>Punkte</span>
         </div>
       </div>
 
@@ -96,8 +120,8 @@ export function MissionEngine({ tasks, onComplete }: Props) {
               key={option.id}
               className={
                 task.type === "multi-choice"
-                  ? `choice-chip ${selected.includes(option.id) ? "selected" : ""}`
-                  : `answer-option ${selected.includes(option.id) ? "selected" : ""}`
+                  ? "choice-chip " + (selected.includes(option.id) ? "selected" : "")
+                  : "answer-option " + (selected.includes(option.id) ? "selected" : "")
               }
               onClick={() => toggleOption(option.id)}
             >
@@ -125,10 +149,10 @@ export function MissionEngine({ tasks, onComplete }: Props) {
       )}
 
       {feedback !== "idle" && (
-        <div className={`feedback ${feedback}`}>
-          {feedback === "hint" && <>Hinweis: {task.hint}</>}
+        <div className={"feedback " + feedback}>
+          {feedback === "hint" && <>Hinweis: {task.hint} Noch 2 Punkte möglich.</>}
           {feedback === "correct" && <>Richtig. {task.explanation}</>}
-          {feedback === "solution" && <>Lösung: {task.explanation}</>}
+          {feedback === "solution" && <>Lösung: {task.explanation} Für diese Aufgabe gibt es 0 Punkte.</>}
         </div>
       )}
 
@@ -139,7 +163,7 @@ export function MissionEngine({ tasks, onComplete }: Props) {
           </button>
         ) : (
           <button className="primary-button" onClick={next}>
-            {index === tasks.length - 1 ? "Mission abschließen" : "Weiter"}
+            {index === tasks.length - 1 ? "Check abschließen" : "Weiter"}
           </button>
         )}
       </div>
