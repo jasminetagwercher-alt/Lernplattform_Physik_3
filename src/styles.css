@@ -2292,3 +2292,51 @@ footer { color: #718199; font-size: .82rem; border-top: 1px solid var(--line); p
     margin: 0 0 12px auto;
   }
 }
+
+
+/* PhET prediction and scored evaluation */
+.phet-prediction {
+  margin-bottom: 18px;
+}
+
+.simulation-frame-wrap.locked-simulation {
+  position: relative;
+}
+
+.simulation-lock {
+  position: absolute;
+  inset: 0 0 42px 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  background: rgba(7,17,31,.68);
+  backdrop-filter: blur(3px);
+  color: #eaf4fc;
+  font-weight: 900;
+  text-align: center;
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.research-step:disabled {
+  opacity: .48;
+  cursor: not-allowed;
+}
+
+.evaluation-question.correct {
+  border-color: rgba(98,231,172,.42);
+  background: rgba(98,231,172,.05);
+}
+
+.evaluation-question.wrong {
+  border-color: rgba(255,120,137,.46);
+  background: rgba(255,120,137,.05);
+}
+
+.evaluation-options button:disabled {
+  cursor: default;
+}
+
+.phet-lab .assessment-bar {
+  margin-top: 18px;
+}
