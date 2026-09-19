@@ -1,4 +1,6 @@
 import { useState } from "react";
+import type { AssessmentResult } from "../assessment/useScoredAssessment";
+import { useScoredAssessment } from "../assessment/useScoredAssessment";
 import type { MediaItem } from "../media/MediaCard";
 import { DraggableMediaTile } from "./DraggableMediaTile";
 import { PointerDragProvider, usePointerDrag } from "./PointerDragProvider";
@@ -73,6 +75,7 @@ export function DiagramLabelDropGame({
   labels,
   targets,
   hint,
+  onComplete,
 }: {
   title: string;
   prompt: string;
@@ -81,39 +84,34 @@ export function DiagramLabelDropGame({
   labels: DiagramLabel[];
   targets: DiagramTarget[];
   hint: string;
+  onComplete?: (result: AssessmentResult) => void;
 }) {
   const [placements, setPlacements] = useState<Record<string, string>>({});
-  const [locked, setLocked] = useState<string[]>([]);
-  const [wrong, setWrong] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
-  const [attempts, setAttempts] = useState(0);
-  const [score, setScore] = useState(0);
-  const [available, setAvailable] = useState<Record<string, number>>(
-    () => Object.fromEntries(labels.map((label) => [label.id, 3])),
-  );
-  const [showHint, setShowHint] = useState(false);
-  const [solutionShown, setSolutionShown] = useState(false);
 
-  const maxScore = labels.length * 3;
+  const assessment = useScoredAssessment({
+    itemIds: labels.map((label) => label.id),
+    onComplete,
+  });
+
   const allPlaced = labels.every((label) => placements[label.id]);
-  const complete = locked.length === labels.length;
 
   function place(sourceId: string, destinationId: string) {
     const labelId = sourceId.replace("tile:", "");
     const targetId = destinationId.replace("diagram:", "");
-    if (locked.includes(labelId)) return;
+    if (assessment.locked.includes(labelId)) return;
 
     setPlacements((current) => {
       const next = { ...current };
       const displaced = Object.entries(next).find(
         ([otherId, currentTarget]) => otherId !== labelId && currentTarget === targetId,
       );
-      if (displaced && locked.includes(displaced[0])) return current;
+      if (displaced && assessment.locked.includes(displaced[0])) return current;
       if (displaced) delete next[displaced[0]];
       next[labelId] = targetId;
       return next;
     });
-    setWrong((items) => items.filter((id) => id !== labelId));
+    assessment.clearWrong(labelId);
     setSelected(null);
   }
 
@@ -123,35 +121,22 @@ export function DiagramLabelDropGame({
   }
 
   function check() {
-    if (!allPlaced || complete) return;
+    if (!allPlaced || assessment.complete) return;
 
     const correct = labels
-      .filter((label) => !locked.includes(label.id) && placements[label.id] === label.targetId)
+      .filter((label) => !assessment.locked.includes(label.id) && placements[label.id] === label.targetId)
       .map((label) => label.id);
     const incorrect = labels
-      .filter((label) => !locked.includes(label.id) && placements[label.id] !== label.targetId)
+      .filter((label) => !assessment.locked.includes(label.id) && placements[label.id] !== label.targetId)
       .map((label) => label.id);
 
-    setAttempts((value) => value + 1);
-    setLocked((current) => [...current, ...correct]);
-    setWrong(incorrect);
-    setScore((value) => value + correct.reduce((sum, id) => sum + (available[id] ?? 0), 0));
-    setAvailable((current) => {
-      const next = { ...current };
-      incorrect.forEach((id) => {
-        next[id] = Math.max(0, (next[id] ?? 0) - 1);
-      });
-      return next;
-    });
+    assessment.check(correct, incorrect);
   }
 
   function reveal() {
     setPlacements(Object.fromEntries(labels.map((label) => [label.id, label.targetId])));
-    setLocked(labels.map((label) => label.id));
-    setWrong([]);
-    setAvailable(Object.fromEntries(labels.map((label) => [label.id, 0])));
     setSelected(null);
-    setSolutionShown(true);
+    assessment.revealSolution();
   }
 
   return (
@@ -162,7 +147,7 @@ export function DiagramLabelDropGame({
           <h2>{title}</h2>
         </div>
         <div className="score-box">
-          <strong>{score}/{maxScore}</strong>
+          <strong>{assessment.score}/{assessment.maxScore}</strong>
           <span>Punkte</span>
         </div>
       </div>
@@ -179,8 +164,8 @@ export function DiagramLabelDropGame({
               onClick={() => setSelected(selected === label.id ? null : label.id)}
             />
           ))}
-          {allPlaced && !complete && <div className="dnd-bank-complete neutral">Alle Kacheln liegen. Jetzt prüfen.</div>}
-          {complete && <div className="dnd-bank-complete">Aufgabe abgeschlossen.</div>}
+          {allPlaced && !assessment.complete && <div className="dnd-bank-complete neutral">Alle Kacheln liegen. Jetzt prüfen.</div>}
+          {assessment.complete && <div className="dnd-bank-complete">Aufgabe abgeschlossen.</div>}
         </div>
 
         <div className="diagram-label-stage">
@@ -193,12 +178,12 @@ export function DiagramLabelDropGame({
                 key={target.id}
                 target={target}
                 placed={placed}
-                locked={Boolean(placedId && locked.includes(placedId))}
-                wrong={Boolean(placedId && wrong.includes(placedId))}
+                locked={Boolean(placedId && assessment.locked.includes(placedId))}
+                wrong={Boolean(placedId && assessment.wrong.includes(placedId))}
                 selected={selected}
                 onSelectTarget={chooseTarget}
                 onSelectLabel={(id) => {
-                  if (!locked.includes(id)) setSelected(selected === id ? null : id);
+                  if (!assessment.locked.includes(id)) setSelected(selected === id ? null : id);
                 }}
               />
             );
@@ -207,23 +192,25 @@ export function DiagramLabelDropGame({
       </PointerDragProvider>
 
       <div className="assessment-bar">
-        <span>Prüfversuche: {attempts}</span>
+        <span>Prüfversuche: {assessment.attempts}</span>
         <span>3 Punkte pro Beschriftung beim ersten Versuch</span>
       </div>
 
-      {!complete && (
+      {!assessment.complete && (
         <div className="game-actions assessment-actions">
-          {attempts >= 1 && <button className="text-button" onClick={() => setShowHint(true)}>Hinweis</button>}
-          {attempts >= 3 && <button className="text-button" onClick={reveal}>Lösung zeigen</button>}
+          {assessment.attempts >= 1 && <button className="text-button" onClick={() => assessment.setShowHint(true)}>Hinweis</button>}
+          {assessment.attempts >= 3 && <button className="text-button" onClick={reveal}>Lösung zeigen</button>}
           <button className="primary-button" disabled={!allPlaced} onClick={check}>Prüfen</button>
         </div>
       )}
 
-      {showHint && !complete && <div className="feedback hint">{hint}</div>}
-      {wrong.length > 0 && !complete && <div className="feedback hint">{wrong.length} Beschriftungen stimmen noch nicht.</div>}
-      {complete && (
-        <div className={solutionShown ? "feedback solution" : "feedback correct"}>
-          {solutionShown ? "Lösung angezeigt." : "Schaltbild richtig beschriftet."} Ergebnis: {score}/{maxScore} Punkte.
+      {assessment.showHint && !assessment.complete && <div className="feedback hint">{hint}</div>}
+      {assessment.wrong.length > 0 && !assessment.complete && (
+        <div className="feedback hint">{assessment.wrong.length} Beschriftungen stimmen noch nicht.</div>
+      )}
+      {assessment.complete && (
+        <div className={assessment.solutionShown ? "feedback solution" : "feedback correct"}>
+          {assessment.solutionShown ? "Lösung angezeigt." : "Schaltbild richtig beschriftet."} Ergebnis: {assessment.score}/{assessment.maxScore} Punkte.
         </div>
       )}
     </section>
