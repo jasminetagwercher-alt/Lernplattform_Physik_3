@@ -1,5 +1,7 @@
 # Physik-Asset-Bibliothek
 
+> **Verbindlichkeit:** Der zentrale Gesamtstandard steht in `docs/QUALITAETSSTANDARD_LERNPLATTFORM.md`. Dieses Dokument konkretisiert nur Medien, Physikobjekte und Simulationen. Bei Überschneidungen gilt der zentrale Qualitätsstandard.
+
 ## Ziel
 
 Die Asset-Bibliothek stellt wiederverwendbare, fachlich kontrollierte Medien für interaktive Aufgaben bereit. Physikalische Gegenstände sollen nicht durch bloße Wortkarten ersetzt werden, wenn eine sinnvolle visuelle Darstellung möglich ist.
