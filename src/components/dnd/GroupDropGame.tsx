@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import type { AssessmentResult } from "../assessment/useScoredAssessment";
+import { useScoredAssessment } from "../assessment/useScoredAssessment";
 import type { MediaItem } from "../media/MediaCard";
 import { DraggableMediaTile } from "./DraggableMediaTile";
 import { DroppableZone } from "./DroppableZone";
@@ -28,75 +30,58 @@ export function GroupDropGame({
   groups,
   tiles,
   hint = "Vergleiche die Karten noch einmal mit den Überschriften der Zielbereiche.",
+  onComplete,
 }: {
   title: string;
   prompt: string;
   groups: DropGroup[];
   tiles: GroupTile[];
   hint?: string;
+  onComplete?: (result: AssessmentResult) => void;
 }) {
   const bank = useMemo(() => shuffle(tiles), [tiles]);
   const [placements, setPlacements] = useState<Record<string, string>>({});
   const [selected, setSelected] = useState<string | null>(null);
-  const [locked, setLocked] = useState<string[]>([]);
-  const [wrong, setWrong] = useState<string[]>([]);
-  const [attempts, setAttempts] = useState(0);
-  const [score, setScore] = useState(0);
-  const [available, setAvailable] = useState<Record<string, number>>(
-    () => Object.fromEntries(tiles.map((tile) => [tile.id, 3])),
-  );
-  const [showHint, setShowHint] = useState(false);
-  const [solvedBySolution, setSolvedBySolution] = useState(false);
 
-  const maxScore = tiles.length * 3;
+  const assessment = useScoredAssessment({
+    itemIds: tiles.map((tile) => tile.id),
+    onComplete,
+  });
+
   const allPlaced = tiles.every((tile) => placements[tile.id]);
-  const complete = locked.length === tiles.length;
 
   function place(tileSourceId: string, targetSourceId: string) {
     const tileId = tileSourceId.replace("tile:", "");
     const groupId = targetSourceId.replace("group:", "");
-    if (locked.includes(tileId)) return;
+    if (assessment.locked.includes(tileId)) return;
 
     setPlacements((current) => ({ ...current, [tileId]: groupId }));
-    setWrong((items) => items.filter((id) => id !== tileId));
+    assessment.clearWrong(tileId);
     setSelected(null);
   }
 
   function chooseTarget(groupId: string) {
     if (!selected) return;
-    place(`tile:${selected}`, `group:${groupId}`);
+    place("tile:" + selected, "group:" + groupId);
   }
 
   function check() {
-    if (!allPlaced || complete) return;
+    if (!allPlaced || assessment.complete) return;
 
-    const newlyCorrect = tiles
-      .filter((tile) => !locked.includes(tile.id) && placements[tile.id] === tile.groupId)
+    const correct = tiles
+      .filter((tile) => !assessment.locked.includes(tile.id) && placements[tile.id] === tile.groupId)
       .map((tile) => tile.id);
-    const newlyWrong = tiles
-      .filter((tile) => !locked.includes(tile.id) && placements[tile.id] !== tile.groupId)
+    const incorrect = tiles
+      .filter((tile) => !assessment.locked.includes(tile.id) && placements[tile.id] !== tile.groupId)
       .map((tile) => tile.id);
 
-    setAttempts((value) => value + 1);
-    setLocked((current) => [...current, ...newlyCorrect]);
-    setWrong(newlyWrong);
-    setScore((value) => value + newlyCorrect.reduce((sum, id) => sum + (available[id] ?? 0), 0));
-    setAvailable((current) => {
-      const next = { ...current };
-      newlyWrong.forEach((id) => {
-        next[id] = Math.max(0, (next[id] ?? 0) - 1);
-      });
-      return next;
-    });
+    assessment.check(correct, incorrect);
   }
 
   function revealSolution() {
     setPlacements(Object.fromEntries(tiles.map((tile) => [tile.id, tile.groupId])));
-    setLocked(tiles.map((tile) => tile.id));
-    setWrong([]);
-    setAvailable(Object.fromEntries(tiles.map((tile) => [tile.id, 0])));
-    setSolvedBySolution(true);
     setSelected(null);
+    assessment.revealSolution();
   }
 
   return (
@@ -107,7 +92,7 @@ export function GroupDropGame({
           <h2>{title}</h2>
         </div>
         <div className="score-box">
-          <strong>{score}/{maxScore}</strong>
+          <strong>{assessment.score}/{assessment.maxScore}</strong>
           <span>Punkte</span>
         </div>
       </div>
@@ -118,23 +103,23 @@ export function GroupDropGame({
           {bank.map((tile) => !placements[tile.id] && (
             <DraggableMediaTile
               key={tile.id}
-              id={`tile:${tile.id}`}
+              id={"tile:" + tile.id}
               item={tile.media}
               selected={selected === tile.id}
               onClick={() => setSelected(selected === tile.id ? null : tile.id)}
             />
           ))}
-          {allPlaced && !complete && (
+          {allPlaced && !assessment.complete && (
             <div className="dnd-bank-complete neutral">Alle Kacheln liegen. Jetzt erst prüfen.</div>
           )}
-          {complete && <div className="dnd-bank-complete">Aufgabe abgeschlossen.</div>}
+          {assessment.complete && <div className="dnd-bank-complete">Aufgabe abgeschlossen.</div>}
         </div>
 
         <div className="group-drop-grid">
           {groups.map((group) => (
             <DroppableZone
               key={group.id}
-              id={`group:${group.id}`}
+              id={"group:" + group.id}
               title={group.title}
               subtitle={group.subtitle}
               active={selected !== null}
@@ -147,18 +132,20 @@ export function GroupDropGame({
                     <div
                       className={[
                         "placed-draggable",
-                        locked.includes(tile.id) ? "correct" : "",
-                        wrong.includes(tile.id) ? "wrong" : "",
+                        assessment.locked.includes(tile.id) ? "correct" : "",
+                        assessment.wrong.includes(tile.id) ? "wrong" : "",
                       ].join(" ")}
                       key={tile.id}
                     >
                       <DraggableMediaTile
-                        id={`tile:${tile.id}`}
+                        id={"tile:" + tile.id}
                         item={tile.media}
-                        disabled={locked.includes(tile.id)}
+                        disabled={assessment.locked.includes(tile.id)}
                         selected={selected === tile.id}
                         onClick={() => {
-                          if (!locked.includes(tile.id)) setSelected(selected === tile.id ? null : tile.id);
+                          if (!assessment.locked.includes(tile.id)) {
+                            setSelected(selected === tile.id ? null : tile.id);
+                          }
                         }}
                       />
                     </div>
@@ -173,29 +160,29 @@ export function GroupDropGame({
       </PointerDragProvider>
 
       <div className="assessment-bar">
-        <span>Prüfversuche: {attempts}</span>
+        <span>Prüfversuche: {assessment.attempts}</span>
         <span>Pro Kachel sind anfangs 3 Punkte möglich.</span>
       </div>
 
-      {!complete && (
+      {!assessment.complete && (
         <div className="game-actions assessment-actions">
-          {attempts >= 1 && <button className="text-button" onClick={() => setShowHint(true)}>Hinweis</button>}
-          {attempts >= 3 && <button className="text-button" onClick={revealSolution}>Lösung zeigen</button>}
+          {assessment.attempts >= 1 && <button className="text-button" onClick={() => assessment.setShowHint(true)}>Hinweis</button>}
+          {assessment.attempts >= 3 && <button className="text-button" onClick={revealSolution}>Lösung zeigen</button>}
           <button className="primary-button" disabled={!allPlaced} onClick={check}>Prüfen</button>
         </div>
       )}
 
-      {showHint && !complete && <div className="feedback hint">{hint}</div>}
-      {wrong.length > 0 && !complete && (
+      {assessment.showHint && !assessment.complete && <div className="feedback hint">{hint}</div>}
+      {assessment.wrong.length > 0 && !assessment.complete && (
         <div className="feedback hint">
-          {wrong.length} {wrong.length === 1 ? "Kachel liegt" : "Kacheln liegen"} noch falsch. Verschiebe nur diese Kacheln und prüfe erneut.
+          {assessment.wrong.length} {assessment.wrong.length === 1 ? "Kachel liegt" : "Kacheln liegen"} noch falsch.
         </div>
       )}
-      {complete && (
-        <div className={solvedBySolution ? "feedback solution" : "feedback correct"}>
-          {solvedBySolution
-            ? `Lösung angezeigt. Dein Ergebnis: ${score} von ${maxScore} Punkten.`
-            : `Geschafft: ${score} von ${maxScore} Punkten.`}
+      {assessment.complete && (
+        <div className={assessment.solutionShown ? "feedback solution" : "feedback correct"}>
+          {assessment.solutionShown
+            ? "Lösung angezeigt. Dein Ergebnis: " + assessment.score + " von " + assessment.maxScore + " Punkten."
+            : "Geschafft: " + assessment.score + " von " + assessment.maxScore + " Punkten."}
         </div>
       )}
     </section>
